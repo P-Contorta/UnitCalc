@@ -2,6 +2,7 @@
 A Python Library for doing Scientific/Engineering mathematics! 
 
 This library explicity supports the following SI units:
+
 Base Units:
 - Ampere
 - Candela
@@ -31,7 +32,8 @@ Non Si Units:
 - Minute
 - Hour
 
-Values can be created with units not explicitly supported by the above units but the they will be represented as combination of the 7 base SI units.
+Values can be created with units not explicitly supported by the above units but they will be represented as combination of the 7 base SI units.
+
 
 ## Usage:
 ### 1.) Getting Started:
