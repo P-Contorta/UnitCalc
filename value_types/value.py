@@ -80,7 +80,7 @@ class CustomValue(object):
         elif isinstance(other,(float,int,complex)):
             return CustomValue(self.value() / other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only divide objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
