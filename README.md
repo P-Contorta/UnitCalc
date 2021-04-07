@@ -34,6 +34,11 @@ Non Si Units:
 
 Values can be created with units not explicitly supported by the above units but they will be represented as combination of the 7 base SI units.
 
+## Installation:
+clone this repository to your machine then execute the following
+```
+pip install <path/to/UnitCalc/>
+```
 
 ## Usage:
 ### 1.) Getting Started:
