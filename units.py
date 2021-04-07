@@ -44,7 +44,7 @@ class Units(object):
         else:
             raise NotImplementedError("Must take the power with an int or float.")
 
-    # Overlaod == Method to test for unit equality not object equality
+    # Overload == method to test for unit equality not object equality
     def __eq__(self,other):
         if isinstance(other,Units):
             other_units = other.as_dict()
@@ -62,6 +62,8 @@ class Units(object):
         else:
             return False
 
+    def __ne__(self,other):
+        return not self==other
 
     # Print out the units
     def __str__(self):
