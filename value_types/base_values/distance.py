@@ -3,7 +3,7 @@ from value_types.value import NonSIValue
 
 
 class Meter(SIValue):
-    _re_pattern = "m$|[Mm]eters?$"
+    _re_pattern = "^m$|^[Mm]eters?$"
 
     def __init__(self,value,prefix:str=""):
         super().__init__(value,prefix=prefix,m=1)
@@ -45,7 +45,7 @@ class Foot(NonSIValue):
 
 
 class Mile(NonSIValue):
-    _re_pattern = "^[Mm]i(le)?$|^[Mm]iles$"
+    _re_pattern = "^[Mm]i(le)?$|^[Mm]iles?$"
     
     def __init__(self,value):
         super().__init__(value,Meter(value * 5280/3.28084),m=1)
