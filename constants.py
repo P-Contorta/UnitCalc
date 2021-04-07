@@ -4,7 +4,7 @@ from units import Units
 import math
 
 class _MetaConstants(type):
-    def __str__(cls):
+    def __repr__(cls):
         print_str = "Constants:\n"
         for cls_meth in dir(cls):
             if not cls_meth.startswith("__") and not cls_meth.endswith("__"):

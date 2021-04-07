@@ -66,7 +66,7 @@ class Units(object):
         return not self==other
 
     # Print out the units
-    def __str__(self):
+    def __repr__(self):
         numerator_value = []
         numerator_pow = []
         denominator_value = []
