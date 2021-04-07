@@ -58,7 +58,26 @@ pip install <path/to/UnitCalc/>
 1
 ```
 
-### 2.) Creating SI units with different scales
+### 2.) Creating values with custom units
+```python
+>>> from physics import PhysObjects
+>>> from units import Units
+>>> phys_factory = PhysObjects()
+>>> # Unit accepts the 7 base SI units as key-word arguments
+>>> # A-> Ampere
+>>> # K-> Kelvin
+>>> # sec -> second
+>>> # m -> meter
+>>> # kg -> kilogram
+>>> # cd -> candela
+>>> # mol -> Mol
+>>> # Webber kg⋅m2⋅s−2⋅A−1
+>>> webber = phys_factory.create(1.34,Units(kg=1,m=2,sec=-2,A=-1))
+>>> webber
+1.34 m² kg / sec² A 
+```
+
+### 3.) Creating SI units with different scales
 ```python
 >>> from physics import PhysObjects
 >>> phys_factory = PhysObjects()
@@ -74,7 +93,7 @@ pip install <path/to/UnitCalc/>
 1.3e-08 A
 ```
 
-### 3.) Converting between SI and Non-SI units
+### 4.) Converting between SI and Non-SI units
 ```python
 >>> from physics import PhysObjects
 >>> phys_factory = PhysObjects()
@@ -90,7 +109,7 @@ pip install <path/to/UnitCalc/>
 273.15 K
 ```
 
-### 4.) Maths and conversions
+### 5.) Maths and conversions
 #### a.) Doubling Temperature
 ```python
 >>> from physics import PhysObjects
@@ -129,7 +148,7 @@ ValueError: Cannot perform addition because the units do not match.
 1e-06 m²
 ```
 
-### 5.) Boolean Operations
+### 6.) Boolean Operations
 ```python
 >>> from physics import PhysObjects
 >>> phys_factory = PhysObjects()
@@ -140,7 +159,7 @@ ValueError: Cannot perform addition because the units do not match.
 True
 ```
 
-### 6.) Constants
+### 7.) Constants
 ```python
 >>> from constants import Constants
 >>> # All Constants
