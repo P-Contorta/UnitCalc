@@ -33,7 +33,7 @@ class CustomValue(object):
         return self._si_units
 
 
-    def __str__(self):
+    def __repr__(self):
         return "{} {}".format(self.si_value(),self.si_symbol())
 
 
@@ -275,7 +275,7 @@ class SIValue(object):
         return self.__class__(new_val,prefix=new_prefix)
 
 
-    def __str__(self):
+    def __repr__(self):
         return "{} {}".format(self.si_value(),self.si_symbol())
 
     # Math
@@ -421,7 +421,7 @@ class NonSIValue(object):
 
 
 
-    def __str__(self):
+    def __repr__(self):
         return "{} {}".format(self.value(),self.symbol())
 
     # Math
