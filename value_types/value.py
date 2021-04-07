@@ -8,7 +8,7 @@ class CustomValue(object):
 
     def __init__(self,value,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
         if not isinstance(value,(int,float,complex)):
-            raise AttributeError("SimpleValue only takes int, float, or complex values as input.")
+            raise AttributeError("CustomValue only takes int, float, or complex values as input.")
 
         # Parameters
         self._value = value
@@ -43,28 +43,28 @@ class CustomValue(object):
             if self.si_units() == other.si_units():
                 return CustomValue(self.central_value() + other.central_value(), **self.si_units().as_dict())
             else:
-                raise ValueError("Cannot add to Phys object with different units.")
+                raise ValueError("Cannot perform addition because the units do not match.")
 
         elif isinstance(other,(float,int,complex)):
             if self.si_units() == Units():
                 return CustomValue(self.value() + other, **self.si_units().as_dict())
-            raise ValueError("Cannot add a dimensionless object a Phys object with dimensions.")
+            raise ValueError("Cannot add a dimensionless unit to a dimensioned unit.")
         else:
-            raise AttributeError("Can only add Phys object to object with type int, float, complex, or Phys.")
+            raise AttributeError("Can only add objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
                 return CustomValue(self.central_value() - other.central_value(), **self.si_units().as_dict())
             else:
-                raise ValueError("Cannot subtract to Phys object with different units.")
+                raise ValueError("Cannot perform subtraction because the units do not match.")
 
         elif isinstance(other,(float,int,complex)):
             if self.si_units() == Units():
                 return CustomValue(self.value() - other, **self.si_units().as_dict())
-            raise ValueError("Cannot subtract a dimensionless object a Phys object with dimensions.")
+            raise ValueError("Cannot subtract a dimensionless unit from a dimensioned unit.")
         else:
-            raise AttributeError("Can only subtract Phys object to object with type int, float, complex, or Phys.")
+            raise AttributeError("Can only subtract objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -72,9 +72,7 @@ class CustomValue(object):
         elif isinstance(other,(float,int,complex)):
             return CustomValue(self.value() * other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only multiply a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
-
-
+            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -82,13 +80,13 @@ class CustomValue(object):
         elif isinstance(other,(float,int,complex)):
             return CustomValue(self.value() / other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only divide a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise NotImplementedError("Must take the power with an int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
 
 
     # Bool
@@ -146,10 +144,10 @@ class SIValue(object):
     @classmethod
     def is_value(cls,value_str:str)->bool:
         if cls._re_pattern is None:
-            raise NotImplementedError("{} must set a non-None value for cls._re_pattern."\
+            raise NotImplementedError("{} must overload cls._re_pattern with a non-None value."\
                                       .format(self.__class__.__name__))
         if not isinstance(cls._re_pattern,str):
-            raise AttributeError("{} has a non-string value for cls._re_pattern. This must be a str."\
+            raise AttributeError("{} has a non-string value for cls._re_pattern. cls._re_pattern must be a str."\
                                  .format(self.__class__.__name__))
         return bool(re.search(cls._re_pattern,value_str))
 
@@ -286,9 +284,9 @@ class SIValue(object):
             if self.si_units() == other.si_units():
                 return self.__class__(self.central_value() + other.central_value()).convert_to_prefix(self._prefix)
             else:
-                raise ValueError("Cannot add a SIValue object with a SIValue with different units.")
+                raise ValueError("Cannot perform addition because the units do not match.")
         else:
-            raise AttributeError("Can only add SIValue the another SIUnit object with the same type.")
+            raise AttributeError("Can only add objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -296,9 +294,9 @@ class SIValue(object):
                 
                 return self.__class__(self.central_value() - other.central_value()).convert_to_prefix(self._prefix)
             else:
-                raise ValueError("Cannot subtract a SIValue object with a SIValue with different units.")
+                raise ValueError("Cannot perform subtraction because the units do not match.")
         else:
-            raise AttributeError("Can only subtract SIValue the another SIUnit object with the same type.")
+            raise AttributeError("Can only subtract objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -306,7 +304,7 @@ class SIValue(object):
         elif isinstance(other,(float,int,complex)):
             return self.__class__(self.value() * other, prefix=self._prefix)
         else:
-            raise AttributeError("Can only multiply a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
 
     def __truediv__(self,other):
@@ -315,13 +313,13 @@ class SIValue(object):
         elif isinstance(other,(float,int,complex)):
             return self.__class__(self.value() / other, prefix=self._prefix)
         else:
-            raise AttributeError("Can only divide a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue or CustomValue.")
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise NotImplementedError("Must take the power with an int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
 
 
     # Bool
@@ -376,10 +374,10 @@ class NonSIValue(object):
     @classmethod
     def is_value(cls,value_str:str)->bool:
         if cls._re_pattern is None:
-            raise NotImplementedError("{} must set a non-None value for cls._re_pattern."\
+            raise NotImplementedError("{} must overload cls._re_pattern. with a non-None value."\
                                       .format(self.__class__.__name__))
         if not isinstance(cls._re_pattern,str):
-            raise AttributeError("{} has a non-string value for cls._re_pattern. This must be a str."\
+            raise AttributeError("{} has a non-string value for cls._re_pattern. cls._re_pattern must be a str."\
                                  .format(self.__class__.__name__))
         return bool(re.search(cls._re_pattern,value_str))
 
@@ -432,18 +430,18 @@ class NonSIValue(object):
             if self.si_units() == other.si_units():
                 return self._si_parent.__class__(self.central_value() + other.central_value()).convert_to_unit(self._symbol)
             else:
-                raise ValueError("Cannot add a NonSIValue object with a NonSIValue with different units.")
+                raise ValueError("Cannot perform addition because the units do not match.")
         else:
-            raise AttributeError("Can only add NonSIValue the another NonSIValue object with the same type.")
+            raise AttributeError("Can only add objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
                 return self._si_parent.__class__(self.central_value() - other.central_value()).convert_to_unit(self._symbol)
             else:
-                raise ValueError("Cannot subtract a NonSIValue object with a NonSIValue with different units.")
+                raise ValueError("Cannot perform subtraction because the units do not match.")
         else:
-            raise AttributeError("Can only subtract NonSIValue the another NonSIValue object with the same type.")
+            raise AttributeError("Can only subtract objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -451,7 +449,7 @@ class NonSIValue(object):
         elif isinstance(other,(float,int,complex)):
             return self._si_parent.__class__(self.central_value() * other).convert_to_unit(self._symbol)
         else:
-            raise AttributeError("Can only multiply a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
 
     def __truediv__(self,other):
@@ -460,13 +458,13 @@ class NonSIValue(object):
         elif isinstance(other,(float,int,complex)):
             return self._si_parent.__class__(self.central_value() / other).convert_to_unit(self._symbol)
         else:
-            raise AttributeError("Can only divide a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise NotImplementedError("Must take the power with an int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
 
 
     # Bool
