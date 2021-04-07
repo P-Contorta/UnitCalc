@@ -28,7 +28,7 @@ class Celcius(NonSIValue):
         super().__init__(value,Kelvin(value + 273.15),K=1)
 
     def _base_symbol(self):
-        return "C"
+        return "⁰C"
         
 
 class Fahrenheit(NonSIValue):
@@ -38,4 +38,4 @@ class Fahrenheit(NonSIValue):
         super().__init__(value,Kelvin(((value - 32) / 1.8) + 273.15),K=1)
 
     def _base_symbol(self):
-        return "F"
+        return "⁰F"

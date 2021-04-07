@@ -80,7 +80,7 @@ class CustomValue(object):
         elif isinstance(other,(float,int,complex)):
             return CustomValue(self.value() / other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only divide objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
@@ -118,7 +118,7 @@ class CustomValue(object):
             return False
 
     def __ge__(self,other):
-        return not self.__lt__(other)
+        return not self < other
 
     def __gt__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -133,7 +133,7 @@ class CustomValue(object):
             return False
 
     def __le__(self,other):
-        return not self.__gt__(other)
+        return not self > other
 
 
 
@@ -351,7 +351,7 @@ class SIValue(object):
             return False
 
     def __ge__(self,other):
-        return not self.__lt__(other)
+        return not self < other
 
     def __gt__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -366,7 +366,7 @@ class SIValue(object):
             return False
 
     def __le__(self,other):
-        return not self.__gt__(other)
+        return not self > other
 
 class NonSIValue(object):
     _re_pattern = None
@@ -496,7 +496,7 @@ class NonSIValue(object):
             return False
 
     def __ge__(self,other):
-        return not self.__lt__(other)
+        return not self < other
 
     def __gt__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -511,4 +511,4 @@ class NonSIValue(object):
             return False
 
     def __le__(self,other):
-        return not self.__gt__(other)
+        return not self > other
