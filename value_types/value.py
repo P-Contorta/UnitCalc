@@ -118,7 +118,7 @@ class CustomValue(object):
             return False
 
     def __ge__(self,other):
-        return not self.__lt__(other)
+        return not self < other
 
     def __gt__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -133,7 +133,7 @@ class CustomValue(object):
             return False
 
     def __le__(self,other):
-        return not self.__gt__(other)
+        return not self > other
 
 
 
