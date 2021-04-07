@@ -8,7 +8,7 @@ class CustomValue(object):
 
     def __init__(self,value,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
         if not isinstance(value,(int,float,complex)):
-            raise AttributeError("SimpleValue only takes int, float, or complex values as input.")
+            raise AttributeError("CustomValue only takes int, float, or complex values as input.")
 
         # Parameters
         self._value = value
@@ -43,28 +43,28 @@ class CustomValue(object):
             if self.si_units() == other.si_units():
                 return CustomValue(self.central_value() + other.central_value(), **self.si_units().as_dict())
             else:
-                raise ValueError("Cannot add to Phys object with different units.")
+                raise ValueError("Cannot perform addition because the units do not match.")
 
         elif isinstance(other,(float,int,complex)):
             if self.si_units() == Units():
                 return CustomValue(self.value() + other, **self.si_units().as_dict())
-            raise ValueError("Cannot add a dimensionless object a Phys object with dimensions.")
+            raise ValueError("Cannot add a dimensionless unit to a dimensioned unit.")
         else:
-            raise AttributeError("Can only add Phys object to object with type int, float, complex, or Phys.")
+            raise AttributeError("Can only add objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
                 return CustomValue(self.central_value() - other.central_value(), **self.si_units().as_dict())
             else:
-                raise ValueError("Cannot subtract to Phys object with different units.")
+                raise ValueError("Cannot perform subtraction because the units do not match.")
 
         elif isinstance(other,(float,int,complex)):
             if self.si_units() == Units():
                 return CustomValue(self.value() - other, **self.si_units().as_dict())
-            raise ValueError("Cannot subtract a dimensionless object a Phys object with dimensions.")
+            raise ValueError("Cannot subtract a dimensionless unit from a dimensioned unit.")
         else:
-            raise AttributeError("Can only subtract Phys object to object with type int, float, complex, or Phys.")
+            raise AttributeError("Can only subtract objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -72,9 +72,7 @@ class CustomValue(object):
         elif isinstance(other,(float,int,complex)):
             return CustomValue(self.value() * other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only multiply a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
-
-
+            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -82,13 +80,13 @@ class CustomValue(object):
         elif isinstance(other,(float,int,complex)):
             return CustomValue(self.value() / other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only divide a CustomValue object to object with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise NotImplementedError("Must take the power with an int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
 
 
     # Bool
