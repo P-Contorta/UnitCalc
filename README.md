@@ -112,7 +112,7 @@ Values can be created with units not explicitly supported by the above units but
 2 ft
 >>> kg = phys_factory.create(1.2,"kg")
 >>> foot + kg
-ValueError: Cannot add a NonSIValue object with a NonSIValue with different units.
+ValueError: Cannot perform addition because the units do not match.
 ```
 #### c.) Powers
 ```python
