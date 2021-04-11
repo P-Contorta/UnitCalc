@@ -52,6 +52,9 @@ class CustomValue(object):
         else:
             raise AttributeError("Can only add objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
+    def __radd__(self,other):
+        return self + other
+
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
@@ -66,6 +69,9 @@ class CustomValue(object):
         else:
             raise AttributeError("Can only subtract objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
+    def __rsub__(self,other):
+        return (self - other) * -1
+
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
@@ -74,6 +80,9 @@ class CustomValue(object):
         else:
             raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
+    def __rmul__(self,other):
+        return self*other
+
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
@@ -81,6 +90,9 @@ class CustomValue(object):
             return CustomValue(self.value() / other, **self.si_units().as_dict())
         else:
             raise AttributeError("Can only divide objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+
+    def __rtruediv__(self,other):
+        return (self / other)**-1
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
@@ -288,6 +300,9 @@ class SIValue(object):
         else:
             raise AttributeError("Can only add objects with type CustomValue, SIValue, or NonSIValue.")
 
+    def __radd__(self,other):
+        return self + other
+
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
@@ -298,6 +313,9 @@ class SIValue(object):
         else:
             raise AttributeError("Can only subtract objects with type CustomValue, SIValue, or NonSIValue.")
 
+    def __rsub__(self,other):
+        return (self - other) * -1
+
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
@@ -306,6 +324,8 @@ class SIValue(object):
         else:
             raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
+    def __rmul__(self,other):
+        return self*other
 
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -314,6 +334,9 @@ class SIValue(object):
             return self.__class__(self.value() / other, prefix=self._prefix)
         else:
             raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+
+    def __rtruediv__(self,other):
+        return (self / other)**-1
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
@@ -434,6 +457,9 @@ class NonSIValue(object):
         else:
             raise AttributeError("Can only add objects with type CustomValue, SIValue, or NonSIValue.")
 
+    def __radd__(self,other):
+        return self + other
+
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
@@ -443,6 +469,9 @@ class NonSIValue(object):
         else:
             raise AttributeError("Can only subtract objects with type CustomValue, SIValue, or NonSIValue.")
 
+    def __rsub__(self,other):
+        return (self - other) * -1
+
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
@@ -451,6 +480,8 @@ class NonSIValue(object):
         else:
             raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
+    def __rmul__(self,other):
+        return self*other
 
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
@@ -459,6 +490,9 @@ class NonSIValue(object):
             return self._si_parent.__class__(self.central_value() / other).convert_to_unit(self._symbol)
         else:
             raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
+
+    def __rtruediv__(self,other):
+        return (self / other)**-1
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
