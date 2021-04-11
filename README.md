@@ -125,9 +125,9 @@ pip install <path/to/UnitCalc/> --upgrade
 >>> C = phys_factory.create(0,"C")
 >>> double_C = C*2
 >>> C
-0 C
+0 ⁰C
 >>> double_C
-273.15 C
+273.15 ⁰C
 ```
 #### b.) Addition/Subtraction
 ```python
