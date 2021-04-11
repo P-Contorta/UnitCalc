@@ -2,7 +2,7 @@ from value_types.value import SIValue
 from value_types.value import NonSIValue
 
 class Kelvin(SIValue):
-    _re_pattern = "K$|[Kk](elvin)?$"
+    _re_pattern = "^K$|^[Kk](elvin)?$"
 
     def __init__(self,value,prefix:str=""):
         super().__init__(value,prefix=prefix,K=1)
