@@ -1,7 +1,7 @@
 from value_types.value import SIValue
 
 class Joule(SIValue):
-    _re_pattern = "J$|[Jj]oules?$"
+    _re_pattern = "^J$|^[Jj]oules?$"
 
     def __init__(self,value,prefix:str=""):
         super().__init__(value,prefix=prefix,
