@@ -15,12 +15,11 @@ class SIUnitParser(object):
                 self._symbol_order.append(_.si_symbol())
 
 
-    def parse(self,units)->str:
+    def parse_symbols(self,units)->str:
         numerator_units = []
         demoninator_units = []
 
         units_to_parse_dict = units.as_dict().copy()
-
         for i, parse_units in enumerate(self._unit_order):
             parse_w_dict = parse_units.as_dict()
 
@@ -46,7 +45,7 @@ class SIUnitParser(object):
                     closest_to_zero_scale = min(closest_to_zero_scale,scale)
                 else:
                     closest_to_zero_scale = 0
-            
+
             if closest_to_zero_scale != 0:
                 if closest_to_zero_scale > 0:
                     if closest_to_zero_scale == 1:
@@ -83,7 +82,10 @@ class SIUnitParser(object):
       
         numerator_str = " ".join(numerator_units)
         denominator_str = " ".join(demoninator_units)
-        print_str = "{} / {}".format(numerator_str,denominator_str)
+        if denominator_str != "":
+            print_str = "{} / {}".format(numerator_str,denominator_str)
+        else:
+            print_str = numerator_str
 
         CODEX = str.maketrans("0123456789.","⁰¹²³⁴⁵⁶⁷⁸⁹·")
         return print_str.translate(CODEX)
