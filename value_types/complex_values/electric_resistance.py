@@ -2,7 +2,7 @@ from value_types.value import SIValue
 from units import Units
 
 class Ohm(SIValue):
-    _re_pattern = "[Oo]hm$|^Ω$"
+    _re_pattern = "^[Oo]hm$|^Ω$"
 
     def __init__(self,value,prefix:str=""):
         super().__init__(value,prefix=prefix,
