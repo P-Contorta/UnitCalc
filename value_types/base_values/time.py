@@ -2,7 +2,7 @@ from value_types.value import SIValue
 from value_types.value import NonSIValue
 
 class Second(SIValue):
-    _re_pattern = "[Ss]ec(ond)?s?$"
+    _re_pattern = "^[Ss]ec(ond)?s?$"
 
     def __init__(self,value,prefix:str=""):
         super().__init__(value,prefix=prefix,sec=1)
