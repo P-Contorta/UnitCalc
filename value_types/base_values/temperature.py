@@ -22,7 +22,7 @@ class Kelvin(SIValue):
 
 
 class Celcius(NonSIValue):
-    _re_pattern = "^[Cc](elcius)?$"
+    _re_pattern = "^⁰C$|^[Cc](elcius)?$"
 
     def __init__(self,value):
         super().__init__(value,Kelvin(value + 273.15),K=1)
@@ -32,7 +32,7 @@ class Celcius(NonSIValue):
         
 
 class Fahrenheit(NonSIValue):
-    _re_pattern = "^[Ff](ahrenheit)?$"
+    _re_pattern = "^⁰F$|^[Ff](ahrenheit)?$"
 
     def __init__(self,value):
         super().__init__(value,Kelvin(((value - 32) / 1.8) + 273.15),K=1)

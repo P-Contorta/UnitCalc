@@ -7,7 +7,7 @@ def get_long_description()->str:
 
 setuptools.setup(
     name="UnitCalc",
-    version="1.0.2",
+    version="1.0.3",
     author="Nicholas Armstrong",
     author_email="nkarmstrong@ucdavis.edu",
     description="A Python Library for doing Scientific/Engineering mathematics!",
