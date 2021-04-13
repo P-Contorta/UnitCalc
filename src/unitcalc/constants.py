@@ -1,4 +1,4 @@
-from .physics import PhysObjects
+from .physics import Physics
 from .units import Units
 
 import math
@@ -17,11 +17,11 @@ class _MetaConstants(type):
 
 
 class Constants(metaclass=_MetaConstants):
-    Phys = PhysObjects()
+    physics = Physics()
 
     @classmethod
     def c(cls):
-        return cls.Phys.create(299792458,Units(m=1,sec=-1))
+        return cls.physics.create(299792458,Units(m=1,sec=-1))
 
     @classmethod
     def speed_of_light(cls):
@@ -31,15 +31,15 @@ class Constants(metaclass=_MetaConstants):
     @classmethod
     def mu_0(cls):
         # approximate value
-        return cls.Phys.create(1.25 * 10**-8, Units(kg=1,m=1,sec=-2,A=-2))
+        return cls.physics.create(1.25 * 10**-8, Units(kg=1,m=1,sec=-2,A=-2))
 
     @classmethod
     def epsilon_0(cls):
-        return cls.Phys.create(8.854187817 * 10**-12, Units(sec=4,A=2,kg=-1,m=-3))
+        return cls.physics.create(8.854187817 * 10**-12, Units(sec=4,A=2,kg=-1,m=-3))
 
     @classmethod
     def h(cls):
-        return cls.Phys.create(6.62607015 * 10**-34, Units(kg=1,m=2,sec=-1))
+        return cls.physics.create(6.62607015 * 10**-34, Units(kg=1,m=2,sec=-1))
     
     @classmethod
     def Planck(cls):
@@ -52,7 +52,7 @@ class Constants(metaclass=_MetaConstants):
     
     @classmethod
     def G(cls):
-        return cls.Phys.create(6.6743015 * 10**-11, Units(m=3,kg=-1,sec=-2))
+        return cls.physics.create(6.6743015 * 10**-11, Units(m=3,kg=-1,sec=-2))
 
     @classmethod
     def gravitational_constant(cls):
@@ -61,7 +61,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def g(cls):
-        return cls.Phys.create(9.80665, Units(m=1,sec=-2))
+        return cls.physics.create(9.80665, Units(m=1,sec=-2))
 
     @classmethod
     def standard_gravity(cls):
@@ -70,7 +70,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def e(cls):
-        return cls.Phys.create(1.602176634 * 10**-19, unit="Coulomb")
+        return cls.physics.create(1.602176634 * 10**-19, unit="Coulomb")
 
     @classmethod
     def elementary_charge(cls):
@@ -79,7 +79,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def R(cls):
-        return cls.Phys.create(8.31446261815324,Units(kg=1,m=2,K=-1,mol=-1,sec=-2))
+        return cls.physics.create(8.31446261815324,Units(kg=1,m=2,K=-1,mol=-1,sec=-2))
     
     @classmethod
     def gas_constant(cls):
@@ -88,7 +88,7 @@ class Constants(metaclass=_MetaConstants):
     
     @classmethod
     def alpha(cls):
-        return (cls.Phys.create(1) / (cls.epsilon_0() * 4 * math.pi)) * (cls.e()**2 / (cls.hbar()*cls.c()))
+        return (cls.physics.create(1) / (cls.epsilon_0() * 4 * math.pi)) * (cls.e()**2 / (cls.hbar()*cls.c()))
 
     @classmethod
     def fine_structure(cls):
@@ -97,7 +97,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def Na(cls):
-        return cls.Phys.create(6.02214076 * 10**-23,Units(mol=-1))
+        return cls.physics.create(6.02214076 * 10**-23,Units(mol=-1))
 
     @classmethod
     def avogadro_constant(cls):
@@ -105,7 +105,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def N0(cls):
-        return cls.Phys.create(6.02214076 * 10**23)
+        return cls.physics.create(6.02214076 * 10**23)
 
     @classmethod
     def avogadro_number(cls):
@@ -114,7 +114,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def k(cls):
-        return cls.Phys.create(1.380649 * 10**-23,Units(kg=1,m=2,sec=-2,K=-1))
+        return cls.physics.create(1.380649 * 10**-23,Units(kg=1,m=2,sec=-2,K=-1))
 
     @classmethod
     def Boltzmann(cls):
@@ -136,7 +136,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def Wiens(cls):
-        return cls.Phys.create(0.002897771955,Units(m=1,K=1))
+        return cls.physics.create(0.002897771955,Units(m=1,K=1))
 
     @classmethod
     def wiens_displacement_constant(cls):
@@ -145,7 +145,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def m_e(cls):
-        return cls.Phys.create(9.1093837015 * 10**-31,unit="kg")
+        return cls.physics.create(9.1093837015 * 10**-31,unit="kg")
 
     @classmethod
     def electron_rest_mass(cls):
@@ -154,7 +154,7 @@ class Constants(metaclass=_MetaConstants):
     
     @classmethod
     def m_p(cls):
-        return cls.Phys.create(1.67262192369 * 10**-27,unit="kg")
+        return cls.physics.create(1.67262192369 * 10**-27,unit="kg")
 
     @classmethod
     def proton_rest_mass(cls):
@@ -163,7 +163,7 @@ class Constants(metaclass=_MetaConstants):
 
     @classmethod
     def m_n(cls):
-        return cls.Phys.create(1.67492749804 * 10**-27,unit="kg")
+        return cls.physics.create(1.67492749804 * 10**-27,unit="kg")
 
     @classmethod
     def neutron_rest_mass(cls):

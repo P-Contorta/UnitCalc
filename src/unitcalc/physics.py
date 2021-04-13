@@ -7,7 +7,7 @@ from typing import TypeVar
 # Types
 number_type = TypeVar("number",int,float,complex)
 unit_type = TypeVar("unit",str,Units,None)
-class PhysObjects(object):
+class Physics(object):
     def create(self,value:number_type, unit:unit_type=None, unit_prefix:str=-1):
         if isinstance(unit,str):
             found_value = False
