@@ -1,4 +1,4 @@
-from value_types.value import SIValue
+from ..value import SIValue
 
 class Volt(SIValue):
     _re_pattern = "^V$|^[Vv]olts?$"

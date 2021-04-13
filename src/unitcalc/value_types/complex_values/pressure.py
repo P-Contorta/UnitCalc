@@ -1,5 +1,4 @@
-from value_types.value import SIValue
-from units import Units
+from ..value import SIValue
 
 class Pascal(SIValue):
     _re_pattern = "^Pa$|^[Pp]ascals?$"

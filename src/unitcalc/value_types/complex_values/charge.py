@@ -1,4 +1,4 @@
-from value_types.value import SIValue
+from ..value import SIValue
 
 class Coulomb(SIValue):
     _re_pattern = "^[Cc]oul(omb)?s?$"
