@@ -1,4 +1,4 @@
-from value_types.value import SIValue
+from ..value import SIValue
 
 class Ampere(SIValue):
     _re_pattern = "^A$|^[Aa]mp(ere)?s?$"

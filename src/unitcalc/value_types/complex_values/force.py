@@ -1,4 +1,4 @@
-from value_types.value import SIValue
+from ..value import SIValue
 
 class Newton(SIValue):
     _re_pattern = "^N$|^[Nn]ewtons?$"

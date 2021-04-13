@@ -1,4 +1,4 @@
-from value_types.value import SIValue
+from ..value import SIValue
 
 class Candela(SIValue):
     _re_pattern = "^cd$|^[Cc]andelas?$"

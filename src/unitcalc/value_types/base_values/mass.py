@@ -1,5 +1,5 @@
-from value_types.value import SIValue
-from value_types.value import NonSIValue
+from ..value import SIValue
+from ..value import NonSIValue
 
 class Kilogram(SIValue):
     _re_pattern = "g$|[Gg]rams?$"
