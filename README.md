@@ -49,26 +49,26 @@ pip install <path/to/UnitCalc/> --upgrade
 ## Usage:
 ### 1.) Getting Started:
 ```python
->>> from physics import PhysObjects
+>>> from unitcalc import Physics
 >>>
 >>> # Create a factory object
->>> phys_factory = PhysObjects()
+>>> physics = Physics()
 >>>
 >>> # Create an Ampere Unit
->>> A = phys_factory.create(13,"A")
+>>> A = physics.create(13,"A")
 >>> A
 13 A
 >>> # Create a Dimensionless Unit
->>> no_dim = phys_factory.create(1)
+>>> no_dim = physics.create(1)
 >>> no_dim
 1
 ```
 
 ### 2.) Creating values with custom units
 ```python
->>> from physics import PhysObjects
+>>> from unitcalc import Physics
 >>> from units import Units
->>> phys_factory = PhysObjects()
+>>> physics = Physics()
 >>> # Unit accepts the 7 base SI units as key-word arguments
 >>> # A-> Ampere
 >>> # K-> Kelvin
@@ -78,18 +78,18 @@ pip install <path/to/UnitCalc/> --upgrade
 >>> # cd -> candela
 >>> # mol -> Mol
 >>> # Webber kg⋅m2⋅s−2⋅A−1
->>> webber = phys_factory.create(1.34,Units(kg=1,m=2,sec=-2,A=-1))
+>>> webber = physics.create(1.34,Units(kg=1,m=2,sec=-2,A=-1))
 >>> webber
 1.34 m² kg / sec² A 
 ```
 
 ### 3.) Creating SI units with different scales
 ```python
->>> from physics import PhysObjects
->>> phys_factory = PhysObjects()
+>>> from unitcalc import Physics
+>>> physics = Physics()
 >>>
 >>> # Create a nanoAmpere
->>> nA = phys_factory.create(13,"A",unit_prefix="nano")
+>>> nA = physics.create(13,"A",unit_prefix="nano")
 >>> nA
 13 nA
 >>> # Convert 13nA to Ampere
@@ -101,10 +101,10 @@ pip install <path/to/UnitCalc/> --upgrade
 
 ### 4.) Converting between SI and Non-SI units
 ```python
->>> from physics import PhysObjects
->>> phys_factory = PhysObjects()
+>>> from unitcalc import Physics
+>>> physics = Physics()
 >>> 
->>> C = phys_factory.create(0,"C")
+>>> C = physics.create(0,"C")
 >>> F = C.convert_to_unit("F")
 >>> K = F.convert_to_unit("K")
 >>> C
@@ -118,11 +118,11 @@ pip install <path/to/UnitCalc/> --upgrade
 ### 5.) Maths and conversions
 #### a.) Doubling Temperature
 ```python
->>> from physics import PhysObjects
->>> phys_factory = PhysObjects()
+>>> from unitcalc import Physics
+>>> physics = Physics()
 >>>
 >>> # Double the temperature at 0 oC
->>> C = phys_factory.create(0,"C")
+>>> C = physics.create(0,"C")
 >>> double_C = C*2
 >>> C
 0 ⁰C
@@ -131,43 +131,43 @@ pip install <path/to/UnitCalc/> --upgrade
 ```
 #### b.) Addition/Subtraction
 ```python
->>> from physics import PhysObjects
->>> phys_factory = PhysObjects()
+>>> from unitcalc import Physics
+>>> physics = Physics()
 >>>
->>> inch = phys_factory.create(12,"In")
->>> foot = phys_factory.create(1,"ft")
+>>> inch = physics.create(12,"In")
+>>> foot = physics.create(1,"ft")
 >>> inch + foot
 24 in
 >>> foot + inch
 2 ft
->>> kg = phys_factory.create(1.2,"kg")
+>>> kg = physics.create(1.2,"kg")
 >>> foot + kg
 ValueError: Cannot perform addition because the units do not match.
 ```
 #### c.) Powers
 ```python
->>> from physics import PhysObjects
->>> phys_factory = PhysObjects()
+>>> from unitcalc import Physics
+>>> physics = Physics()
 >>>
->>> mm = phys_factory.create(1,"meter",unit_prefix="mili")
+>>> mm = physics.create(1,"meter",unit_prefix="mili")
 >>> mm**2
 1e-06 m²
 ```
 
 ### 6.) Boolean Operations
 ```python
->>> from physics import PhysObjects
->>> phys_factory = PhysObjects()
+>>> from unitcalc import Physics
+>>> physics = Physics()
 >>>
->>> inch = phys_factory.create(12,"In")
->>> foot = phys_factory.create(1,"ft")
+>>> inch = physics.create(12,"In")
+>>> foot = physics.create(1,"ft")
 >>> inch == foot
 True
 ```
 
 ### 7.) Constants
 ```python
->>> from constants import Constants
+>>> from unitcalc import Constants
 >>> # All Constants
 >>> Constants
 Constants:
