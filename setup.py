@@ -12,6 +12,7 @@ setuptools.setup(
     author_email = "nkarmstrong@ucdavis.edu",
     description = "A Python Library for doing Scientific/Engineering mathematics!",
     long_description = get_long_description(),
+    long_description_content_type='text/x-rst',
     url = "https://github.com/P-Contorta/UnitCalc",
     packages = setuptools.find_namespace_packages(),
     install_requires = [],
