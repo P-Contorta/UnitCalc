@@ -31,7 +31,7 @@ setuptools.setup(
                    "Topic :: Scientific/Engineering :: Astronomy",
                    "Topic :: Scientific/Engineering :: Chemistry",
                    "Topic :: Scientific/Engineering :: Mathematics",
-                   "Topic :: Scientific/Engineering :: Physics"]
+                   "Topic :: Scientific/Engineering :: Physics"],
     keywords = ['Python3+',"GNU GPL 3.0 License",
                 'SI','units',
                 'Science',"Math","Engineering","Education","STEM"]
