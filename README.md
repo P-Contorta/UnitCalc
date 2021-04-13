@@ -35,16 +35,27 @@ Non Si Units:
 Values can be created with units not explicitly supported by the above units but they will be represented as combination of the 7 base SI units.
 
 ## Installation:
-clone this repository to your machine then execute the following:
 ```
-pip install <path/to/UnitCalc/>
+pip install unitcalc
 ```
 
 ## Upgrade:
-pull the latest version from the main branch then execute the following:
 ```
-pip install <path/to/UnitCalc/> --upgrade
+pip install unitcalc --upgrade
 ```
+
+## Installing the development version
+clone the develop branch to your computer and execute:
+```
+pip install <path/to/UnitCalc>
+```
+
+## Upgrading the development version
+pull the latest version from the develop branch then execute the following:
+```
+pip install <path/to/UnitCalc> --upgrade
+```
+
 
 ## Usage:
 ### 1.) Getting Started:
@@ -67,7 +78,7 @@ pip install <path/to/UnitCalc/> --upgrade
 ### 2.) Creating values with custom units
 ```python
 >>> from unitcalc import Physics
->>> from units import Units
+>>> from unitcalc import Units
 >>> physics = Physics()
 >>> # Unit accepts the 7 base SI units as key-word arguments
 >>> # A-> Ampere
