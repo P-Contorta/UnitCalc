@@ -1,4 +1,4 @@
-from value_types.value import SIValue
+from ..value import SIValue
 
 class Joule(SIValue):
     _re_pattern = "^J$|^[Jj]oules?$"
