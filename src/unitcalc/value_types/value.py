@@ -447,7 +447,7 @@ class NonSIValue(object):
 
     def __init__(self,value,si_parent,
                      sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0,
-                     parser=parser):
+                     parser=None):
         if not isinstance(value,(int,float,complex)):
             raise AttributeError("NonSIValue only takes int, float, or complex values as input.")
 
