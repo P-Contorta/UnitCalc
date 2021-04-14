@@ -6,7 +6,9 @@ class CustomValue(object):
     def is_value(cls,value_name:str):
         return False
 
-    def __init__(self,value,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0,parser=None):
+    def __init__(self,value,
+                      sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0,
+                      parser=None):
         if not isinstance(value,(int,float,complex)):
             raise AttributeError("CustomValue only takes int, float, or complex values as input.")
 
@@ -186,8 +188,10 @@ class SIValue(object):
                                  .format(self.__class__.__name__))
         return bool(re.search(cls._re_pattern,value_str))
 
-    def __init__(self,value,prefix="",center_prefix="",
-                      sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
+    def __init__(self,value,
+                      prefix="",center_prefix="",
+                      sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0,
+                      parser=None):
         if not isinstance(value,(int,float,complex)):
             raise AttributeError("SIValue only takes int, float, or complex values as input.")
 
@@ -200,6 +204,8 @@ class SIValue(object):
 
         self._si_units = Units(sec=sec,m=m,kg=kg,K=K,A=A,mol=mol,cd=cd)
         self._symbol = self._prefix + self._base_symbol()
+
+        self._parser=parser
 
 
     def _base_symbol(self):
@@ -317,7 +323,8 @@ class SIValue(object):
     def __add__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
-                return self.__class__(self.central_value() + other.central_value()).convert_to_prefix(self._prefix)
+                return self.__class__(self.central_value() + other.central_value(),
+                                      parser=self._parser).convert_to_prefix(self._prefix)
             else:
                 raise ValueError("Cannot perform addition because the units do not match.")
         else:
@@ -329,8 +336,8 @@ class SIValue(object):
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
-                
-                return self.__class__(self.central_value() - other.central_value()).convert_to_prefix(self._prefix)
+                return self.__class__(self.central_value() - other.central_value(),
+                                      parser=self._parser).convert_to_prefix(self._prefix)
             else:
                 raise ValueError("Cannot perform subtraction because the units do not match.")
         else:
@@ -341,9 +348,13 @@ class SIValue(object):
 
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
-            return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
+            return CustomValue(self.central_value() * other.central_value(),
+                               parser=self._parser,
+                               **(self.si_units()*other.si_units()).as_dict())
         elif isinstance(other,(float,int,complex)):
-            return self.__class__(self.value() * other, prefix=self._prefix)
+            return self.__class__(self.value() * other,
+                                  parser=self._parser,
+                                  prefix=self._prefix)
         else:
             raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
@@ -352,9 +363,13 @@ class SIValue(object):
 
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
-            return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
+            return CustomValue(self.central_value() / other.central_value(),
+                               parser=self._parser,
+                               **(self.si_units()/other.si_units()).as_dict())
         elif isinstance(other,(float,int,complex)):
-            return self.__class__(self.value() / other, prefix=self._prefix)
+            return self.__class__(self.value() / other,
+                                  parser=self._parser,
+                                  prefix=self._prefix)
         else:
             raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue or CustomValue.")
 
@@ -363,7 +378,9 @@ class SIValue(object):
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
-            return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
+            return CustomValue(self.central_value()**modulo,
+                               parser=self._parser,
+                               **(self.si_units()**modulo).as_dict())
         else:
             raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
 
