@@ -4,8 +4,11 @@ from ..value import NonSIValue
 class Kilogram(SIValue):
     _re_pattern = "g$|[Gg]rams?$"
 
-    def __init__(self,value,prefix:str="kilo"):
-        super().__init__(value,prefix=prefix,center_prefix="kilo",kg=1)
+    def __init__(self,value,prefix:str="kilo",parser=None):
+        super().__init__(value,
+                         prefix=prefix,center_prefix="kilo",
+                         kg=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "g"
@@ -26,7 +29,10 @@ class Pound(NonSIValue):
     _re_pattern = "^[Ll]bs?$|^[Pp]ounds?$"
 
     def __init__(self,value):
-        super().__init__(value,Kilogram(value / 2.2046226218),kg=1)
+        super().__init__(value,
+                         Kilogram(value / 2.2046226218),
+                         kg=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "lb"
@@ -37,7 +43,10 @@ class Ton(NonSIValue):
     _re_pattern = "^[Tt]ons?$"
 
     def __init__(self,value):
-        super().__init__(value,Kilogram(value * 2000/2.2046226218),kg=1)
+        super().__init__(value,
+                         Kilogram(value * 2000/2.2046226218),
+                         kg=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "ton"

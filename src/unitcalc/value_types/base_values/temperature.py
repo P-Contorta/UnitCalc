@@ -4,8 +4,11 @@ from ..value import NonSIValue
 class Kelvin(SIValue):
     _re_pattern = "^K$|^[Kk](elvin)?$"
 
-    def __init__(self,value,prefix:str=""):
-        super().__init__(value,prefix=prefix,K=1)
+    def __init__(self,value,prefix:str="kilo",parser=None):
+        super().__init__(value,
+                         prefix=prefix,
+                         K=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "K"
@@ -25,7 +28,10 @@ class Celcius(NonSIValue):
     _re_pattern = "^⁰C$|^[Cc](elcius)?$"
 
     def __init__(self,value):
-        super().__init__(value,Kelvin(value + 273.15),K=1)
+        super().__init__(value,
+                         Kelvin(value + 273.15),
+                         K=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "⁰C"
@@ -35,7 +41,10 @@ class Fahrenheit(NonSIValue):
     _re_pattern = "^⁰F$|^[Ff](ahrenheit)?$"
 
     def __init__(self,value):
-        super().__init__(value,Kelvin(((value - 32) / 1.8) + 273.15),K=1)
+        super().__init__(value,
+                         Kelvin(((value - 32) / 1.8) + 273.15),
+                         K=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "⁰F"

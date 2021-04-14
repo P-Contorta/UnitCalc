@@ -4,8 +4,11 @@ from ..value import NonSIValue
 class Second(SIValue):
     _re_pattern = "^[Ss]ec(ond)?s?$"
 
-    def __init__(self,value,prefix:str=""):
-        super().__init__(value,prefix=prefix,sec=1)
+    def __init__(self,value,prefix:str="",parser=None):
+        super().__init__(value,
+                         prefix=prefix,
+                         sec=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "sec"
@@ -25,7 +28,10 @@ class Minute(NonSIValue):
     _re_pattern = "^[Mm]in(ute)?s?$"
 
     def __init__(self,value):
-        super().__init__(value,Second(value * 60),sec=1)
+        super().__init__(value,
+                         Second(value * 60),
+                         sec=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "min"
@@ -35,7 +41,10 @@ class Hour(NonSIValue):
     _re_pattern = "^[Hh](ou)?rs?$"
 
     def __init__(self,value):
-        super().__init__(value,Second(value * 3600),sec=1)
+        super().__init__(value,
+                         Second(value * 3600),
+                         sec=1,
+                         parser=parser)
 
     def _base_symbol(self):
         return "hr"
