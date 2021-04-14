@@ -15,6 +15,7 @@ class SIUnitParser(object):
 
 
     # Simplify by trying to remove the most base SI units per pass -- Greedy Algo
+    # all objects passed in are modified
     def _recurrent_symbol_parse(self,parse_units,units_to_parse:dict)->(list,dict):
         units_to_parse_cp = units_to_parse.copy()
         max_tmp_value = None
@@ -71,7 +72,7 @@ class SIUnitParser(object):
                     max_tmp_value = possible_units_simplified
                     max_idx = i
 
-        if max_scale != 0:
+        if max_scale != 0 and max_scale is not None:
             extract = parse_units.pop(max_idx)
             extract_units_dict = extract.si_units().as_dict()
             for key in extract_units_dict:
@@ -93,7 +94,8 @@ class SIUnitParser(object):
 
 
     def parse_symbols(self,units)->str:
-        symbols_data, remaining_units = self._recurrent_symbol_parse(self._value_order,units.as_dict().copy())
+        symbols_data, remaining_units = self._recurrent_symbol_parse(self._value_order.copy(),
+                                                                     units.as_dict().copy())
         symbols_data = sorted(symbols_data,key=lambda x:abs(x[1]))
 
         numerator_units = []
