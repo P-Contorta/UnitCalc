@@ -44,7 +44,7 @@ class Foot(NonSIValue):
     _re_pattern = "^[Ff](oo)?t$|^[Ff]eet$"
 
     def __init__(self,value):
-        super().__init__(value,'
+        super().__init__(value,
                          Meter(value * 0.3048),
                          m=1,
                          parser=parser)
