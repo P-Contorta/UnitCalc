@@ -4,38 +4,43 @@ import math
 
 class SIUnitParser(object):
     def __init__(self,*values:SIValue):
-        self._unit_order = []
-        self._symbol_order = []
+        self._value_order = []
         for value in values:
             if not issubclass(value,SIValue):
                 raise AttributeError("SIUnitParser only accepts SIValue objects as arguments")
             else:
-                _ = value(0)
-                self._unit_order.append(_.si_units())
-                self._symbol_order.append(_.si_symbol())
+                # Init method to get access to units
+                # classmethod doesn't work with current value object design
+                self._value_order.append(value(0))
 
 
-    def parse_symbols(self,units)->str:
-        numerator_units = []
-        demoninator_units = []
-
-        units_to_parse_dict = units.as_dict().copy()
-        for i, parse_units in enumerate(self._unit_order):
-            parse_w_dict = parse_units.as_dict()
+    # Simplify by trying to remove the most base SI units per pass -- Greedy Algo
+    def _recurrent_symbol_parse(self,parse_units,units_to_parse:dict)->(list,dict):
+        units_to_parse_cp = units_to_parse.copy()
+        max_tmp_value = None
+        max_scale = None
+        max_idx = None
+        result = []
+        omit_units_idx = set()
+        units_result = units_to_parse
+        for i,parse_unit in enumerate(parse_units):
+            parse_w_si_units = parse_unit.si_units().as_dict()
 
             closest_to_zero_scale = None
-            for key in parse_w_dict:
-                parse_w_value = parse_w_dict[key]
+            total_units = 0
+            for key in parse_w_si_units:
+                parse_w_value = parse_w_si_units[key]
                 if parse_w_value == 0:
                     continue
                 else:
-                    value_to_parse = units_to_parse_dict[key]
+                    value_to_parse = units_to_parse_cp[key]
 
-                raw_scale = value_to_parse/parse_w_value
-                if raw_scale > 0:
-                    scale = math.floor(raw_scale)
+                total_units += abs(parse_w_value)
+                raw_scale_from_zero = value_to_parse/parse_w_value
+                if raw_scale_from_zero > 0:
+                    scale = math.floor(raw_scale_from_zero)
                 else:
-                    scale = math.ceil(raw_scale)
+                    scale = math.ceil(raw_scale_from_zero)
 
                 if closest_to_zero_scale is None:
                     closest_to_zero_scale = scale
@@ -46,40 +51,82 @@ class SIUnitParser(object):
                 else:
                     closest_to_zero_scale = 0
 
-            if closest_to_zero_scale != 0:
-                if closest_to_zero_scale > 0:
-                    if closest_to_zero_scale == 1:
-                        numerator_units.append(str(self._symbol_order[i]))
-                    else:
-                        numerator_units.append("{}{}".format(self._symbol_order[i],
-                                                            closest_to_zero_scale))
-                else:
-                    if closest_to_zero_scale == -1:
-                        demoninator_units.append(str(self._symbol_order[i]))
-                    else:
-                        demoninator_units.append("{}{}".format(self._symbol_order[i],
-                                                            closest_to_zero_scale*-1))
+            if closest_to_zero_scale is None:
+                closest_to_zero_scale = 0
 
-                for key in parse_w_dict:
-                    parse_w_value = parse_w_dict[key]
-                    units_to_parse_dict[key] = units_to_parse_dict[key] - parse_w_value*closest_to_zero_scale
+            
+            if closest_to_zero_scale == 0:
+                omit_units_idx.add(i)
+                
 
-        # Generate string #
-        for key in units_to_parse_dict:
-            value = units_to_parse_dict[key]
-            if value > 0:
-                if value == 1:
-                    numerator_units.append(str(key))
+            possible_units_simplified = abs(total_units * closest_to_zero_scale)
+            if max_scale is None:
+                max_scale = closest_to_zero_scale
+                max_tmp_value = possible_units_simplified
+                max_idx = i
+                
+            else:
+                if possible_units_simplified > max_tmp_value:
+                    max_scale = closest_to_zero_scale
+                    max_tmp_value = possible_units_simplified
+                    max_idx = i
+
+        if max_scale != 0:
+            extract = parse_units.pop(max_idx)
+            extract_units_dict = extract.si_units().as_dict()
+            for key in extract_units_dict:
+                extract_value = extract_units_dict[key]
+                units_to_parse_cp[key] = units_to_parse_cp[key] - (extract_value * max_scale)
+            
+            result.append((extract.si_symbol(),max_scale))
+
+            new_parse_units = []
+            for i,parse_unit in enumerate(parse_units):
+                if i not in omit_units_idx:
+                    new_parse_units.append(parse_unit)
+            recurrent_results, units_result = self._recurrent_symbol_parse(new_parse_units,units_to_parse_cp)
+            result.extend(recurrent_results)
+
+        return result, units_result
+
+
+
+
+    def parse_symbols(self,units)->str:
+        symbols_data, remaining_units = self._recurrent_symbol_parse(self._value_order,units.as_dict().copy())
+        symbols_data = sorted(symbols_data,key=lambda x:abs(x[1]))
+
+        numerator_units = []
+        demoninator_units = []
+ 
+        for symbol, power  in symbols_data:
+            if power > 0:
+                if power == 1:
+                    numerator_units.append(symbol)
                 else:
-                    numerator_units.append("{}{}".format(key,value))
-            elif value < 0:
-                if value == -1:
-                    demoninator_units.append(str(key))
+                    numerator_units.append("{}{}".format(symbol,power))
+            elif power < 0:
+                if power == -1:
+                    demoninator_units.append(symbol)
                 else:
-                    demoninator_units.append("{}{}".format(key,value*-1))
+                    demoninator_units.append("{}{}".format(symbol,power*-1))
             else:
                 continue
-      
+
+        for symbol, power in sorted(remaining_units.items(),key=lambda x:abs(x[1])):
+            if power > 0:
+                if power == 1:
+                    numerator_units.append(symbol)
+                else:
+                    numerator_units.append("{}{}".format(symbol,power))
+            elif power < 0:
+                if power == -1:
+                    demoninator_units.append(symbol)
+                else:
+                    demoninator_units.append("{}{}".format(symbol,power*-1))
+            else:
+                continue
+
         numerator_str = " ".join(numerator_units)
         denominator_str = " ".join(demoninator_units)
         if denominator_str != "":
