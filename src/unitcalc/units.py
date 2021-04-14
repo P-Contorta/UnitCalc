@@ -98,4 +98,4 @@ class Units(object):
                 print_str += "{} ".format(value)
 
         CODEX = str.maketrans("0123456789.","⁰¹²³⁴⁵⁶⁷⁸⁹·")
-        return print_str.translate(CODEX)
+        return print_str.translate(CODEX)[:-1]
