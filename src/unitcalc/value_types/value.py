@@ -445,7 +445,9 @@ class NonSIValue(object):
         return bool(re.search(cls._re_pattern,value_str))
 
 
-    def __init__(self,value,si_parent,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
+    def __init__(self,value,si_parent,
+                     sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0,
+                     parser=parser):
         if not isinstance(value,(int,float,complex)):
             raise AttributeError("NonSIValue only takes int, float, or complex values as input.")
 
@@ -455,6 +457,8 @@ class NonSIValue(object):
 
         self._si_units = Units(sec=sec,m=m,kg=kg,K=K,A=A,mol=mol,cd=cd)
         self._symbol = self._base_symbol()
+
+        self._parser = parser
 
     def _base_symbol(self):
         raise NotImplementedError("{} needs to have _base_symbol overloaded.".format(self.__class__.__name__))
@@ -491,7 +495,8 @@ class NonSIValue(object):
     def __add__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
-                return self._si_parent.__class__(self.central_value() + other.central_value()).convert_to_unit(self._symbol)
+                return self._si_parent.__class__(self.central_value() + other.central_value(),
+                                                 parser=self._parser).convert_to_unit(self._symbol)
             else:
                 raise ValueError("Cannot perform addition because the units do not match.")
         else:
@@ -503,7 +508,8 @@ class NonSIValue(object):
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
-                return self._si_parent.__class__(self.central_value() - other.central_value()).convert_to_unit(self._symbol)
+                return self._si_parent.__class__(self.central_value() - other.central_value(),
+                                                 parser=self._parser).convert_to_unit(self._symbol)
             else:
                 raise ValueError("Cannot perform subtraction because the units do not match.")
         else:
@@ -514,9 +520,12 @@ class NonSIValue(object):
 
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
-            return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
+            return CustomValue(self.central_value() * other.central_value(),
+                               parser=self._parser,
+                               **(self.si_units()*other.si_units()).as_dict())
         elif isinstance(other,(float,int,complex)):
-            return self._si_parent.__class__(self.central_value() * other).convert_to_unit(self._symbol)
+            return self._si_parent.__class__(self.central_value() * other,
+                                             parser=self._parser).convert_to_unit(self._symbol)
         else:
             raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
@@ -525,9 +534,12 @@ class NonSIValue(object):
 
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
-            return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
+            return CustomValue(self.central_value() / other.central_value(),
+                               parser=self._parser,
+                               **(self.si_units()/other.si_units()).as_dict())
         elif isinstance(other,(float,int,complex)):
-            return self._si_parent.__class__(self.central_value() / other).convert_to_unit(self._symbol)
+            return self._si_parent.__class__(self.central_value() / other,
+                                             parser=self._parser).convert_to_unit(self._symbol)
         else:
             raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
 
@@ -536,7 +548,9 @@ class NonSIValue(object):
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
-            return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
+            return CustomValue(self.central_value()**modulo,
+                               parser=self._parser,
+                               **(self.si_units()**modulo).as_dict())
         else:
             raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
 
