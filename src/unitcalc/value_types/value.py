@@ -34,7 +34,11 @@ class CustomValue(object):
 
 
     def __repr__(self):
-        return "{} {}".format(self.si_value(),self.si_symbol())
+        si_symbol_str = self.si_symbol()
+        if si_symbol_str == "":
+            return "{}".format(self.si_value())
+        else:
+            return "{} {}".format(self.si_value(),si_symbol_str)
 
 
     # Math
