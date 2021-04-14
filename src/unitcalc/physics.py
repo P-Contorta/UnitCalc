@@ -30,8 +30,8 @@ class Physics(object):
                 raise AttributeError("The unit provided is not a supported measurement.")
 
         elif isinstance(unit,Units):
-            return CustomValue(value,**unit.as_dict())
+            return CustomValue(value,parser=self._parser,**unit.as_dict())
         elif unit is None:
-            return CustomValue(value)
+            return CustomValue(value,parser=self._parser)
         else:
             raise AttributeError("The unit provided must be a string, None, or of type Units()")
