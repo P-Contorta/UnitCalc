@@ -64,7 +64,7 @@ class SIUnitParser(object):
                     parse_w_value = parse_w_dict[key]
                     units_to_parse_dict[key] = units_to_parse_dict[key] - parse_w_value*closest_to_zero_scale
 
-
+        # Generate string #
         for key in units_to_parse_dict:
             value = units_to_parse_dict[key]
             if value > 0:
@@ -89,6 +89,7 @@ class SIUnitParser(object):
 
         CODEX = str.maketrans("0123456789.","⁰¹²³⁴⁵⁶⁷⁸⁹·")
         return print_str.translate(CODEX)
+
 
 
     def __repr__(self):
