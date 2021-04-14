@@ -6,14 +6,18 @@ class CustomValue(object):
     def is_value(cls,value_name:str):
         return False
 
-    def __init__(self,value,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
+    def __init__(self,value,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0,parser=None):
         if not isinstance(value,(int,float,complex)):
             raise AttributeError("CustomValue only takes int, float, or complex values as input.")
 
         # Parameters
         self._value = value
         self._si_units = Units(sec=sec,m=m,kg=kg,K=K,A=A,mol=mol,cd=cd)
-        self._symbol = str(self._si_units)
+        self._parser = parser
+        if self._parser is not None:
+            self._symbol = self._parser.parse_symbols(self._si_units)
+        else:
+            self._symbol = str(self._si_units)
 
     def value(self):
         return self._value
@@ -26,6 +30,7 @@ class CustomValue(object):
 
     def symbol(self):
         return self._symbol
+
     def si_symbol(self):
         return self.symbol()
 
@@ -41,13 +46,17 @@ class CustomValue(object):
     def __add__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
-                return CustomValue(self.central_value() + other.central_value(), **self.si_units().as_dict())
+                return CustomValue(self.central_value() + other.central_value(), 
+                                   parser=self._parser,
+                                   **self.si_units().as_dict())
             else:
                 raise ValueError("Cannot perform addition because the units do not match.")
 
         elif isinstance(other,(float,int,complex)):
             if self.si_units() == Units():
-                return CustomValue(self.value() + other, **self.si_units().as_dict())
+                return CustomValue(self.value() + other, 
+                                   parser=self._parser,
+                                   **self.si_units().as_dict())
             raise ValueError("Cannot add a dimensionless unit to a dimensioned unit.")
         else:
             raise AttributeError("Can only add objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
@@ -58,13 +67,17 @@ class CustomValue(object):
     def __sub__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             if self.si_units() == other.si_units():
-                return CustomValue(self.central_value() - other.central_value(), **self.si_units().as_dict())
+                return CustomValue(self.central_value() - other.central_value(),
+                                   parser=self._parser,
+                                   **self.si_units().as_dict())
             else:
                 raise ValueError("Cannot perform subtraction because the units do not match.")
 
         elif isinstance(other,(float,int,complex)):
             if self.si_units() == Units():
-                return CustomValue(self.value() - other, **self.si_units().as_dict())
+                return CustomValue(self.value() - other, 
+                                   parser=self._parser,
+                                   **self.si_units().as_dict())
             raise ValueError("Cannot subtract a dimensionless unit from a dimensioned unit.")
         else:
             raise AttributeError("Can only subtract objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
@@ -74,9 +87,13 @@ class CustomValue(object):
 
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
-            return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
+            return CustomValue(self.central_value() * other.central_value(),
+                               parser=self._parser,
+                               **(self.si_units()*other.si_units()).as_dict())
         elif isinstance(other,(float,int,complex)):
-            return CustomValue(self.value() * other, **self.si_units().as_dict())
+            return CustomValue(self.value() * other,
+                               parser=self._parser,
+                               **self.si_units().as_dict())
         else:
             raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
@@ -85,9 +102,13 @@ class CustomValue(object):
 
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
-            return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
+            return CustomValue(self.central_value() / other.central_value(),
+                               parser=self._parser,
+                               **(self.si_units()/other.si_units()).as_dict())
         elif isinstance(other,(float,int,complex)):
-            return CustomValue(self.value() / other, **self.si_units().as_dict())
+            return CustomValue(self.value() / other,
+                               parser=self._parser,
+                               **self.si_units().as_dict())
         else:
             raise AttributeError("Can only divide objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
 
@@ -96,7 +117,9 @@ class CustomValue(object):
 
     def __pow__(self,modulo):
         if isinstance(modulo,(int,float,complex)):
-            return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
+            return CustomValue(self.central_value()**modulo,
+                               parser=self._parser,
+                               **(self.si_units()**modulo).as_dict())
         else:
             raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
 
