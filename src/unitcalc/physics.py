@@ -8,6 +8,9 @@ from typing import TypeVar
 number_type = TypeVar("number",int,float,complex)
 unit_type = TypeVar("unit",str,Units,None)
 class Physics(object):
+    def __init__(self,parser=None):
+        self._parser = parser
+
     def create(self,value:number_type, unit:unit_type=None, unit_prefix:str=-1):
         if isinstance(unit,str):
             found_value = False
