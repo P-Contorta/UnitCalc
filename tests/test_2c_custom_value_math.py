@@ -131,3 +131,39 @@ class CustomValueSub(unittest.TestCase):
     def test_rsub_invalid(self):
         with self.assertRaises(AttributeError):
             "invalid" - CustomValueSub.cv_1
+
+
+
+class CustomValueMult(unittest.TestCase):
+    cv_1 = CustomValue(2,kg=1,m=2)
+    cv_2 = CustomValue(2,kg=-1,A=1,m=2)
+    const_int = 5
+    const_float = 5.
+
+    def test_mult_with_custom_value(self):
+        ans = CustomValueMult.cv_1 * CustomValueMult.cv_2
+        self.assertEqual(ans,CustomValue(4,A=1,m=4))
+
+    def test_mult_with_int(self):
+        ans = CustomValueMult.cv_1 * CustomValueMult.const_int
+        self.assertEqual(ans,CustomValue(10.,kg=1,m=2))
+
+    def test_mult_with_float(self):
+        ans = CustomValueMult.cv_1 * CustomValueMult.const_float
+        self.assertEqual(ans,CustomValue(10.,kg=1,m=2))
+
+    def test_mult_invalid(self):
+        with self.assertRaises(AttributeError):
+            CustomValueMult.cv_1 * "invalid"
+
+    def test_rmult_with_int(self):
+        ans = CustomValueMult.const_int * CustomValueMult.cv_1
+        self.assertEqual(ans,CustomValue(10.,kg=1,m=2))
+
+    def test_rmult_with_float(self):
+        ans = CustomValueMult.const_float * CustomValueMult.cv_1
+        self.assertEqual(ans,CustomValue(10.,kg=1,m=2))
+
+    def test_rmult_invalid(self):
+        with self.assertRaises(AttributeError):
+            "invalid" * CustomValueMult.cv_1
