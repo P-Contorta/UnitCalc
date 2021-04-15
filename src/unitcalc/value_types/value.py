@@ -26,6 +26,7 @@ class CustomValue(object):
 
     def symbol(self):
         return self._symbol
+        
     def si_symbol(self):
         return self.symbol()
 
