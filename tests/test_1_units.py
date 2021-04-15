@@ -81,7 +81,6 @@ class UnitMathMethods(unittest.TestCase):
 
 
 class UnitStrReprMethods(unittest.TestCase):
-    
     def test_0_to_6_str(self):
         self.assertEqual(str(Units(kg=0,A=1,m=2,sec=3,cd=4,K=5,mol=6)),
                          "A m² sec³ cd⁴ K⁵ mol⁶")
