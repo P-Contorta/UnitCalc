@@ -102,8 +102,6 @@ class UnitStrReprMethods(unittest.TestCase):
         self.assertEqual(str(Units(kg=1.23,A=-4.56)),
                          "kg¹·²³ / A⁴·⁵⁶")
 
-    
-    
     def test_0_to_6_repr(self):
         self.assertEqual(Units(kg=0,A=1,m=2,sec=3,cd=4,K=5,mol=6).__repr__(),
                          "A m² sec³ cd⁴ K⁵ mol⁶")
