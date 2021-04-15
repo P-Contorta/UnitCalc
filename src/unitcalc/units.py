@@ -71,7 +71,7 @@ class Units(object):
         numerator_pow = []
         denominator_value = []
         denominator_pow = []
-        for key, value in self.as_dict().items():
+        for key, value in sorted(self.as_dict().items(),key=lambda x: abs(x[1])):
             if value > 0:
                 numerator_value.append(key)
                 numerator_pow.append(value)
