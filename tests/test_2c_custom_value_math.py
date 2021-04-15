@@ -167,3 +167,39 @@ class CustomValueMult(unittest.TestCase):
     def test_rmult_invalid(self):
         with self.assertRaises(AttributeError):
             "invalid" * CustomValueMult.cv_1
+
+
+class CustomValueTrueDiv(unittest.TestCase):
+    cv_1 = CustomValue(2,kg=1,m=2)
+    cv_2 = CustomValue(2,kg=-1,A=1,m=2)
+    const_int = 5
+    const_float = 5.
+
+    def test_mult_with_custom_value(self):
+        ans = CustomValueTrueDiv.cv_1 / CustomValueTrueDiv.cv_2
+        self.assertEqual(ans,CustomValue(1,kg=2,A=-1))
+
+    def test_mult_with_int(self):
+        ans = CustomValueTrueDiv.cv_1 / CustomValueTrueDiv.const_int
+        self.assertEqual(ans,CustomValue(.4,kg=1,m=2))
+
+    def test_mult_with_float(self):
+        ans = CustomValueTrueDiv.cv_1 / CustomValueTrueDiv.const_float
+        self.assertEqual(ans,CustomValue(.4,kg=1,m=2))
+
+    def test_mult_invalid(self):
+        with self.assertRaises(AttributeError):
+            CustomValueTrueDiv.cv_1 / "invalid"
+
+    def test_rmult_with_int(self):
+        ans = CustomValueTrueDiv.const_int / CustomValueTrueDiv.cv_1
+        self.assertEqual(ans,CustomValue(2.5,kg=-1,m=-2))
+
+    def test_rmult_with_float(self):
+        ans = CustomValueTrueDiv.const_float / CustomValueTrueDiv.cv_1
+        self.assertEqual(ans,CustomValue(2.5,kg=-1,m=-2))
+
+    def test_rmult_invalid(self):
+        with self.assertRaises(AttributeError):
+            "invalid" / CustomValueTrueDiv.cv_1
+
