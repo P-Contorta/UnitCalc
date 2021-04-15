@@ -7,8 +7,8 @@ class CustomValue(object):
         return False
 
     def __init__(self,value,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
-        if not isinstance(value,(int,float,complex)):
-            raise AttributeError("CustomValue only takes int, float, or complex values as input.")
+        if not isinstance(value,(int,float)):
+            raise AttributeError("CustomValue only takes int or float values as input.")
 
         # Parameters
         self._value = value
@@ -49,12 +49,12 @@ class CustomValue(object):
             else:
                 raise ValueError("Cannot perform addition because the units do not match.")
 
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             if self.si_units() == Units():
                 return CustomValue(self.value() + other, **self.si_units().as_dict())
             raise ValueError("Cannot add a dimensionless unit to a dimensioned unit.")
         else:
-            raise AttributeError("Can only add objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only add objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __radd__(self,other):
         return self + other
@@ -66,12 +66,12 @@ class CustomValue(object):
             else:
                 raise ValueError("Cannot perform subtraction because the units do not match.")
 
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             if self.si_units() == Units():
                 return CustomValue(self.value() - other, **self.si_units().as_dict())
             raise ValueError("Cannot subtract a dimensionless unit from a dimensioned unit.")
         else:
-            raise AttributeError("Can only subtract objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only subtract objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __rsub__(self,other):
         return (self - other) * -1
@@ -79,10 +79,10 @@ class CustomValue(object):
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return CustomValue(self.value() * other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only multiply objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __rmul__(self,other):
         return self*other
@@ -90,19 +90,19 @@ class CustomValue(object):
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return CustomValue(self.value() / other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only divide objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only divide objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __rtruediv__(self,other):
         return (self / other)**-1
 
     def __pow__(self,modulo):
-        if isinstance(modulo,(int,float,complex)):
+        if isinstance(modulo,(int,float)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int or float.")
 
 
     # Bool
