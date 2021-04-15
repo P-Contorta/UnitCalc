@@ -203,3 +203,20 @@ class CustomValueTrueDiv(unittest.TestCase):
         with self.assertRaises(AttributeError):
             "invalid" / CustomValueTrueDiv.cv_1
 
+
+
+class CustomValuePow(unittest.TestCase):
+    cv = CustomValue(2,kg=1,m=1,sec=-2)
+
+    def test_pow_int(self):
+        self.assertEqual(CustomValue(4,kg=2,m=2,sec=-4),
+                         CustomValuePow.cv**2)
+
+    def test_pow_float(self):
+        self.assertEqual(CustomValue(4.,kg=2,m=2,sec=-4),
+                         CustomValuePow.cv**2)
+
+    def test_pow_invalid(self):
+        with self.assertRaises(AttributeError):
+            CustomValuePow.cv**"invalid"
+
