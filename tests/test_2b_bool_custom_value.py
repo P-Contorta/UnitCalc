@@ -3,7 +3,6 @@ from unitcalc.value_types.value import CustomValue
 
 
 class CustomValueEquals(unittest.TestCase):
-
     def test_equals_same_units(self):
         self.assertTrue(CustomValue(2.34,kg=1,A=-1) == CustomValue(2.34,kg=1,A=-1))
 
@@ -31,7 +30,6 @@ class CustomValueEquals(unittest.TestCase):
 
 
 class CustomValueNotEquals(unittest.TestCase):
-
     def test_not_equals_same_units(self):
         self.assertFalse(CustomValue(2.34,kg=1,A=-1) != CustomValue(2.34,kg=1,A=-1))
 
@@ -56,3 +54,30 @@ class CustomValueNotEquals(unittest.TestCase):
 
     def test_not_equals_differrent_object(self):
         self.assertTrue(CustomValue(2.34,kg=1,A=-1) != "str-type")
+
+
+class CustomValueLessThan(unittest.TestCase):
+    def test_lt_same_units_true(self):
+        self.assertTrue(CustomValue(1.23,kg=1,A=-1) < CustomValue(4.56,kg=1,A=-1))
+
+    def test_lt_same_units_false(self):
+        self.assertFalse(CustomValue(4.56,kg=1,A=-1) < CustomValue(1.23,kg=1,A=-1))
+
+    def test_lt_dimless_and_int_true(self):
+        self.assertTrue(CustomValue(1) < 2)
+
+
+    def test_lt_dimless_and_int_false(self):
+        self.assertFalse(CustomValue(2) < 1)
+
+    def test_lt_dimless_and_float_true(self):
+        self.assertTrue(CustomValue(1.234) < 4.321)
+
+
+    def test_lt_dimless_and_float_false(self):
+        self.assertFalse(CustomValue(4.321) < 1.234)
+
+    def test_lt_invalid(self):
+        with self.assertRaises(TypeError):
+            CustomValue(4.321) < "invalid"
+
