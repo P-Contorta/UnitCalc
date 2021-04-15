@@ -102,6 +102,28 @@ class UnitStrReprMethods(unittest.TestCase):
         self.assertEqual(str(Units(kg=1.23,A=-4.56)),
                          "kg¹·²³ / A⁴·⁵⁶")
 
+    
+    
+    def test_0_to_6_repr(self):
+        self.assertEqual(Units(kg=0,A=1,m=2,sec=3,cd=4,K=5,mol=6).__repr__(),
+                         "A m² sec³ cd⁴ K⁵ mol⁶")
+
+    def test_7_to_9_repr(self):
+        self.assertEqual(Units(kg=7,A=8,m=9).__repr__(),
+                         "kg⁷ A⁸ m⁹")
+
+    def test_neg_1_to_neg_8_repr(self):
+        self.assertEqual(Units(kg=-1,A=-2,m=-3,sec=-4,cd=-5,K=-6,mol=-7).__repr__(),
+                         "/ kg A² m³ sec⁴ cd⁵ K⁶ mol⁷")
+
+    def test_neg_9_repr(self):
+        self.assertEqual(Units(kg=-8,A=-9).__repr__(),
+                         "/ kg⁸ A⁹")
+
+    def test_decimal_repr(self):
+        self.assertEqual(Units(kg=1.23,A=-4.56).__repr__(),
+                         "kg¹·²³ / A⁴·⁵⁶")
+
 
 if __name__ == '__main__':
     unittest.main()
