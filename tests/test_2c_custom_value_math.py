@@ -70,64 +70,64 @@ class CustomValueAdd(unittest.TestCase):
 class CustomValueSub(unittest.TestCase):
     cv_1 = CustomValue(1,kg=1,m=2)
     cv_2 = CustomValue(2,kg=1,m=2)
-    cv_dimless = CustomValue(3.14)
+    cv_dimless = CustomValue(3.1)
     const_int = 5
     const_float = 5.
 
     def test_sub_same_units(self):
         ans = CustomValue(-1,kg=1,m=2)
-        test_sum = CustomValueAdd.cv_1 - CustomValueAdd.cv_2
+        test_sum = CustomValueSub.cv_1 - CustomValueSub.cv_2
         self.assertEqual(ans,test_sum)
 
 
     def test_sub_dimensionless_and_const_int(self):
-        ans = CustomValue(-1.86)
-        test_sum = CustomValueAdd.cv_dimless - CustomValueAdd.const_int
-        self.assertAlmostEqual(ans,test_sum)
+        ans = CustomValue(-1.9)
+        test_sum = CustomValueSub.cv_dimless - CustomValueSub.const_int
+        self.assertEqual(ans,test_sum)
 
     def test_sub_dimensionless_and_const_float(self):
-        ans = CustomValue(-1.86)
-        test_sum = CustomValueAdd.cv_dimless - CustomValueAdd.const_float
-        self.assertAlmostEqual(ans,test_sum)
+        ans = CustomValue(-1.9)
+        test_sum = CustomValueSub.cv_dimless - CustomValueSub.const_float
+        self.assertEqual(ans,test_sum)
 
 
     def test_sub_diff_units_dimless(self):
         with self.assertRaises(ValueError):
-            CustomValueAdd.cv_1 - CustomValueAdd.cv_dimless
+            CustomValueSub.cv_1 - CustomValueSub.cv_dimless
 
     def test_sub_diff_units_int(self):
         with self.assertRaises(ValueError):
-            CustomValueAdd.cv_1 - CustomValueAdd.const_int
+            CustomValueSub.cv_1 - CustomValueSub.const_int
 
     def test_sub_diff_units_float(self):
         with self.assertRaises(ValueError):
-            CustomValueAdd.cv_1 - CustomValueAdd.const_float
+            CustomValueSub.cv_1 - CustomValueSub.const_float
 
 
     def test_sub_invalid(self):
         with self.assertRaises(AttributeError):
-            CustomValueAdd.cv_1 - "invalid"
+            CustomValueSub.cv_1 - "invalid"
 
 
     def test_rsub_dimensionless_and_const_int(self):
-        ans = CustomValue(1.86)
-        test_sum = CustomValueAdd.const_int - CustomValueAdd.cv_dimless
-        self.assertAlmostEqual(ans,test_sum)
+        ans = CustomValue(1.9)
+        test_sum = CustomValueSub.const_int - CustomValueSub.cv_dimless
+        self.assertEqual(ans,test_sum)
 
     def test_rsub_dimensionless_and_const_float(self):
-        ans = CustomValue(1.86)
-        test_sum = CustomValueAdd.const_float - CustomValueAdd.cv_dimless
-        self.assertAlmostEqual(ans,test_sum)
+        ans = CustomValue(1.9)
+        test_sum = CustomValueSub.const_float - CustomValueSub.cv_dimless
+        self.assertEqual(ans,test_sum)
 
 
     def test_rsub_diff_units_int(self):
         with self.assertRaises(ValueError):
-            CustomValueAdd.const_int - CustomValueAdd.cv_1
+            CustomValueSub.const_int - CustomValueSub.cv_1
 
     def test_sub_diff_units_float(self):
         with self.assertRaises(ValueError):
-            CustomValueAdd.const_float - CustomValueAdd.cv_1
+            CustomValueSub.const_float - CustomValueSub.cv_1
 
     def test_rsub_invalid(self):
         with self.assertRaises(AttributeError):
-            "invalid" - CustomValueAdd.cv_1
+            "invalid" - CustomValueSub.cv_1
