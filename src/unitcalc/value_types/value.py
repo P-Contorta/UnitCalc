@@ -170,8 +170,8 @@ class SIValue(object):
 
     def __init__(self,value,prefix="",center_prefix="",
                       sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
-        if not isinstance(value,(int,float,complex)):
-            raise AttributeError("SIValue only takes int, float, or complex values as input.")
+        if not isinstance(value,(int,float)):
+            raise AttributeError("SIValue only takes int or float values as input.")
 
         # Parameters
         self._prefix, self._power = self._parse_prefix(prefix)
