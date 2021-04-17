@@ -197,7 +197,7 @@ class SIValue(object):
         pico_re = "^p(ico)?$|^Pico$"
         nano_re = "^n(ano)?$|^Nano$"
         micro_re= "^μ$|^[Mm]icro$"
-        mili_re = "^m(ili)?$|^[M]ili$"
+        milli_re = "^m(illi)?$|^[M]illi$"
         centi_re = "^c(enti)?$|^Centi$"
         deci_re = "^d(eci)?$|^Deci$"
 
@@ -229,7 +229,7 @@ class SIValue(object):
             return "n", -9
         elif re.search(micro_re,name):
             return "μ", -6
-        elif re.search(mili_re,name):
+        elif re.search(milli_re,name):
             return "m", -3
         elif re.search(centi_re,name):
             return "c", -2
