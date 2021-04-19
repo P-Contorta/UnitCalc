@@ -165,7 +165,7 @@ class SIValue(object):
                                       .format(cls.__class__.__name__))
         if not isinstance(cls._re_pattern,str):
             raise AttributeError("{} has a non-string value for cls._re_pattern. cls._re_pattern must be a str."\
-                                 .format(self.__class__.__name__))
+                                 .format(cls.__class__.__name__))
         return bool(re.search(cls._re_pattern,value_str))
 
     def __init__(self,value,prefix="",center_prefix="",
@@ -402,10 +402,10 @@ class NonSIValue(object):
     def is_value(cls,value_str:str)->bool:
         if cls._re_pattern is None:
             raise NotImplementedError("{} must overload cls._re_pattern. with a non-None value."\
-                                      .format(self.__class__.__name__))
+                                      .format(cls.__class__.__name__))
         if not isinstance(cls._re_pattern,str):
             raise AttributeError("{} has a non-string value for cls._re_pattern. cls._re_pattern must be a str."\
-                                 .format(self.__class__.__name__))
+                                 .format(cls.__class__.__name__))
         return bool(re.search(cls._re_pattern,value_str))
 
 
