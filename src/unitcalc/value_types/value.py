@@ -323,10 +323,10 @@ class SIValue(object):
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self.__class__(self.value() * other, prefix=self._prefix)
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, SIValue, NonSIValue, or CustomValue.")
 
     def __rmul__(self,other):
         return self*other
@@ -334,19 +334,19 @@ class SIValue(object):
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self.__class__(self.value() / other, prefix=self._prefix)
         else:
-            raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only divide objects with type int, float, SIValue, NonSIValue or CustomValue.")
 
     def __rtruediv__(self,other):
         return (self / other)**-1
 
     def __pow__(self,modulo):
-        if isinstance(modulo,(int,float,complex)):
+        if isinstance(modulo,(int,float)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int or float.")
 
 
     # Bool
@@ -410,8 +410,8 @@ class NonSIValue(object):
 
 
     def __init__(self,value,si_parent,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
-        if not isinstance(value,(int,float,complex)):
-            raise AttributeError("NonSIValue only takes int, float, or complex values as input.")
+        if not isinstance(value,(int,float)):
+            raise AttributeError("NonSIValue only takes int or float values as input.")
 
         # Parameters
         self._value = value
@@ -479,10 +479,10 @@ class NonSIValue(object):
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self._si_parent.__class__(self.central_value() * other).convert_to_unit(self._symbol)
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, SIValue, NonSIValue, or CustomValue.")
 
     def __rmul__(self,other):
         return self*other
@@ -490,19 +490,19 @@ class NonSIValue(object):
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self._si_parent.__class__(self.central_value() / other).convert_to_unit(self._symbol)
         else:
-            raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
+            raise AttributeError("Can only divide objects with type int, float, SIValue, NonSIValue, or CustomValue.")
 
     def __rtruediv__(self,other):
         return (self / other)**-1
 
     def __pow__(self,modulo):
-        if isinstance(modulo,(int,float,complex)):
+        if isinstance(modulo,(int,float)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int or float.")
 
 
     # Bool
