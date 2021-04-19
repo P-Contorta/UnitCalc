@@ -267,7 +267,6 @@ class SIValue(object):
     def central_value(self):
         return self._central_value
 
-
     def symbol(self):
         return self._symbol
 
