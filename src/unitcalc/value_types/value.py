@@ -411,7 +411,10 @@ class NonSIValue(object):
 
     def __init__(self,value,si_parent,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
         if not isinstance(value,(int,float)):
-            raise AttributeError("NonSIValue only takes int or float values as input.")
+            raise AttributeError("NonSIValue only takes int or float as input for value.")
+
+        if not isinstance(si_parent,SIValue):
+            raise AttributeError("NonSIValue only takes SIValue as input for si_parent.")
 
         # Parameters
         self._value = value
