@@ -30,7 +30,7 @@ class Meter(SIValue):
 class Inch(NonSIValue):
     _re_pattern = "^[Ii]n(ches)?$|^[Ii]nch$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,
                          Meter(value * 0.0254),
                          m=1,
@@ -43,7 +43,7 @@ class Inch(NonSIValue):
 class Foot(NonSIValue):
     _re_pattern = "^[Ff](oo)?t$|^[Ff]eet$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,
                          Meter(value * 0.3048),
                          m=1,
@@ -56,7 +56,7 @@ class Foot(NonSIValue):
 class Mile(NonSIValue):
     _re_pattern = "^[Mm]i(le)?$|^[Mm]iles?$"
     
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,
                          Meter(value * 5280/3.28084),
                          m=1,

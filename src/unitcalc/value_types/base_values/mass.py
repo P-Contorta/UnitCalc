@@ -28,7 +28,7 @@ class Kilogram(SIValue):
 class Pound(NonSIValue):
     _re_pattern = "^[Ll]bs?$|^[Pp]ounds?$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,
                          Kilogram(value / 2.2046226218),
                          kg=1,
@@ -42,7 +42,7 @@ class Pound(NonSIValue):
 class Ton(NonSIValue):
     _re_pattern = "^[Tt]ons?$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,
                          Kilogram(value * 2000/2.2046226218),
                          kg=1,

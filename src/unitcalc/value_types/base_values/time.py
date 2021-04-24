@@ -27,7 +27,7 @@ class Second(SIValue):
 class Minute(NonSIValue):
     _re_pattern = "^[Mm]in(ute)?s?$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,
                          Second(value * 60),
                          sec=1,
@@ -40,7 +40,7 @@ class Minute(NonSIValue):
 class Hour(NonSIValue):
     _re_pattern = "^[Hh](ou)?rs?$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,
                          Second(value * 3600),
                          sec=1,
