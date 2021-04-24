@@ -566,8 +566,6 @@ class NonSIValue(object):
             else:
                 raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
-
-
     def __ge__(self,other):
         return not self < other
 
