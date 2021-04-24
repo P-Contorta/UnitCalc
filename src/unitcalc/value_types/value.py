@@ -553,12 +553,20 @@ class NonSIValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() < other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a less than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() < other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() < other:
-                    return True
-            return False
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, or NonSIValue.")
+
+
 
     def __ge__(self,other):
         return not self < other
@@ -568,12 +576,18 @@ class NonSIValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() > other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a greater than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() > other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() > other:
-                    return True
-            return False
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __le__(self,other):
         return not self > other
