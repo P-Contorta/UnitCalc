@@ -87,9 +87,6 @@ class NonSIValueNotEquals(unittest.TestCase):
     def test_ne_diff_object_invalid(self):
         self.assertTrue(NonSIValueAllPositive(1.23) != "str-type")
 
-
-
-
 class NonSIValueLessThan(unittest.TestCase):
     def test_lt_same_units_true(self):
         self.assertTrue(NonSIValueAllPositive(1.23) < NonSIValueAllPositive(3.21))
