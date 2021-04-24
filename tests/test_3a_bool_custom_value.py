@@ -84,6 +84,10 @@ class CustomValueLessThan(unittest.TestCase):
     def test_lt_dimless_and_float_eq_false(self):
         self.assertFalse(CustomValue(4.321) < 4.321)
 
+    def test_lt_diff_units(self):
+        with self.assertRaises(ValueError):
+            CustomValue(1.23,kg=1,A=-1) < CustomValue(4.56,m=1)
+
     def test_lt_invalid(self):
         with self.assertRaises(TypeError):
             CustomValue(4.321) < "invalid"
@@ -116,6 +120,10 @@ class CustomValueGreaterThanEqual(unittest.TestCase):
 
     def test_ge_dimless_and_float_eq_true(self):
         self.assertTrue(CustomValue(4.321) >= 4.321)
+
+    def test_ge_diff_units(self):
+        with self.assertRaises(ValueError):
+            CustomValue(4.56,kg=1,A=-1) >= CustomValue(1.23,m=1)
 
     def test_ge_invalid(self):
         with self.assertRaises(TypeError):
@@ -150,6 +158,10 @@ class CustomValueGreaterThan(unittest.TestCase):
     def test_gt_dimless_and_float_eq_false(self):
         self.assertFalse(CustomValue(1.234) > 1.234)
 
+    def test_gt_diff_units(self):
+        with self.assertRaises(ValueError):
+            CustomValue(4.56,kg=1,A=-1) > CustomValue(1.23,m=1)
+
     def test_gt_invalid(self):
         with self.assertRaises(TypeError):
             CustomValue(4.321) > "invalid"
@@ -182,6 +194,10 @@ class CustomValueLessThanEqual(unittest.TestCase):
 
     def test_le_dimless_and_float_eq_true(self):
         self.assertTrue(CustomValue(1.234) <= 1.234)
+
+    def test_le_diff_units(self):
+        with self.assertRaises(ValueError):
+            CustomValue(1.23,kg=1,A=-1) <= CustomValue(4.56,m=1)
 
     def test_le_invalid(self):
         with self.assertRaises(TypeError):
