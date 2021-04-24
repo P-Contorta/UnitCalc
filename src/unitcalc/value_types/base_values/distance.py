@@ -3,7 +3,7 @@ from ..value import NonSIValue
 
 
 class Meter(SIValue):
-    _re_pattern = "^m$|^[Mm]eters?$"
+    _re_pattern = "^[Mm]$|^[Mm]eters?$"
 
     def __init__(self,value,prefix:str=""):
         super().__init__(value,prefix=prefix,m=1)
@@ -13,11 +13,11 @@ class Meter(SIValue):
 
     def convert_to_unit(self,unit_name:str):
         if Inch.is_value(unit_name):
-            return Inch(self.central_value() * 39.37008)
+            return Inch(self.central_value() * 39.370078740157)
         elif Foot.is_value(unit_name):
-            return Foot(self.central_value() * 3.28084)
+            return Foot(self.central_value() * 3.2808398950131)
         elif Mile.is_value(unit_name):
-            return Mile(self.central_value() * 3.28084 / 5280)
+            return Mile(self.central_value() * 3.2808398950131/ 5280)
         elif Meter.is_value(unit_name):
             return self
         else:
@@ -48,7 +48,7 @@ class Mile(NonSIValue):
     _re_pattern = "^[Mm]i(le)?$|^[Mm]iles?$"
     
     def __init__(self,value):
-        super().__init__(value,Meter(value * 5280/3.28084),m=1)
+        super().__init__(value,Meter(value * 5280/3.2808398950131),m=1)
 
     def _base_symbol(self):
         return "Mi"
