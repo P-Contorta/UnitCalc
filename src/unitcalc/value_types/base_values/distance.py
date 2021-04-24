@@ -3,7 +3,7 @@ from ..value import NonSIValue
 
 
 class Meter(SIValue):
-    _re_pattern = "^m$|^[Mm]eters?$"
+    _re_pattern = "^[Mm]$|^[Mm]eters?$"
 
     def __init__(self,value,prefix:str=""):
         super().__init__(value,prefix=prefix,m=1)
