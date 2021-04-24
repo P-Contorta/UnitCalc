@@ -1,7 +1,7 @@
 from ..value import SIValue
 
 class Volt(SIValue):
-    _re_pattern = "^V$|^[Vv]olts?$"
+    _re_pattern = "^[Vv]$|^[Vv]olts?$"
 
     def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,

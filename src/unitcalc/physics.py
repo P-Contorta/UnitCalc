@@ -6,7 +6,7 @@ from .unit_parser.parse_units import SIUnitParser
 from typing import TypeVar
 
 # Types
-number_type = TypeVar("number",int,float,complex)
+number_type = TypeVar("number",int,float)
 unit_type = TypeVar("unit",str,Units,None)
 class Physics(object):
     def __init__(self,parser=None):
@@ -17,6 +17,9 @@ class Physics(object):
         self._parser = parser
 
     def create(self,value:number_type, unit:unit_type=None, unit_prefix:str=-1):
+        if not isinstance(value,(int,float)):
+            raise TypeError("Values must have the type float or int.")
+        
         if isinstance(unit,str):
             found_value = False
             for value_type in value_types_container:
@@ -32,7 +35,8 @@ class Physics(object):
                     break
 
             if not found_value:
-                raise AttributeError("The unit provided is not a supported measurement.")
+                msg = "The unit '{}' is not a supported measurement.".format(unit)
+                raise AttributeError(msg)
 
         elif isinstance(unit,Units):
             return CustomValue(value,parser=self._parser,**unit.as_dict())
