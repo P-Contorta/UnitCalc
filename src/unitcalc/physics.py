@@ -27,7 +27,8 @@ class Physics(object):
                     break
 
             if not found_value:
-                raise AttributeError("The unit provided is not a supported measurement.")
+                msg = "The unit '{}' is not a supported measurement.".format(unit)
+                raise AttributeError(msg)
 
         elif isinstance(unit,Units):
             return CustomValue(value,**unit.as_dict())
