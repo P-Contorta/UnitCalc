@@ -7,8 +7,8 @@ class CustomValue(object):
         return False
 
     def __init__(self,value,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
-        if not isinstance(value,(int,float,complex)):
-            raise AttributeError("CustomValue only takes int, float, or complex values as input.")
+        if not isinstance(value,(int,float)):
+            raise AttributeError("CustomValue only takes int or float values as input.")
 
         # Parameters
         self._value = value
@@ -26,6 +26,7 @@ class CustomValue(object):
 
     def symbol(self):
         return self._symbol
+        
     def si_symbol(self):
         return self.symbol()
 
@@ -34,7 +35,11 @@ class CustomValue(object):
 
 
     def __repr__(self):
-        return "{} {}".format(self.si_value(),self.si_symbol())
+        si_symbol_str = self.si_symbol()
+        if si_symbol_str == "":
+            return "{}".format(self.si_value())
+        else:
+            return "{} {}".format(self.si_value(),si_symbol_str)
 
 
     # Math
@@ -45,12 +50,12 @@ class CustomValue(object):
             else:
                 raise ValueError("Cannot perform addition because the units do not match.")
 
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             if self.si_units() == Units():
                 return CustomValue(self.value() + other, **self.si_units().as_dict())
             raise ValueError("Cannot add a dimensionless unit to a dimensioned unit.")
         else:
-            raise AttributeError("Can only add objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only add objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __radd__(self,other):
         return self + other
@@ -62,12 +67,12 @@ class CustomValue(object):
             else:
                 raise ValueError("Cannot perform subtraction because the units do not match.")
 
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             if self.si_units() == Units():
                 return CustomValue(self.value() - other, **self.si_units().as_dict())
             raise ValueError("Cannot subtract a dimensionless unit from a dimensioned unit.")
         else:
-            raise AttributeError("Can only subtract objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only subtract objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __rsub__(self,other):
         return (self - other) * -1
@@ -75,10 +80,10 @@ class CustomValue(object):
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return CustomValue(self.value() * other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only multiply objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __rmul__(self,other):
         return self*other
@@ -86,19 +91,19 @@ class CustomValue(object):
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return CustomValue(self.value() / other, **self.si_units().as_dict())
         else:
-            raise AttributeError("Can only divide objects with type int, float, complex, CustomValue, SIValue, or NonSIValue.")
+            raise AttributeError("Can only divide objects with type int, float, CustomValue, SIValue, or NonSIValue.")
 
     def __rtruediv__(self,other):
         return (self / other)**-1
 
     def __pow__(self,modulo):
-        if isinstance(modulo,(int,float,complex)):
+        if isinstance(modulo,(int,float)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int or float.")
 
 
     # Bool
@@ -122,12 +127,18 @@ class CustomValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() < other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a less than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() < other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() < other:
-                    return True
-            return False
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __ge__(self,other):
         return not self < other
@@ -137,12 +148,18 @@ class CustomValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() > other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a greater than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() > other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() > other:
-                    return True
-            return False
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __le__(self,other):
         return not self > other
@@ -157,16 +174,16 @@ class SIValue(object):
     def is_value(cls,value_str:str)->bool:
         if cls._re_pattern is None:
             raise NotImplementedError("{} must overload cls._re_pattern with a non-None value."\
-                                      .format(self.__class__.__name__))
+                                      .format(cls.__class__.__name__))
         if not isinstance(cls._re_pattern,str):
             raise AttributeError("{} has a non-string value for cls._re_pattern. cls._re_pattern must be a str."\
-                                 .format(self.__class__.__name__))
+                                 .format(cls.__class__.__name__))
         return bool(re.search(cls._re_pattern,value_str))
 
     def __init__(self,value,prefix="",center_prefix="",
                       sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
-        if not isinstance(value,(int,float,complex)):
-            raise AttributeError("SIValue only takes int, float, or complex values as input.")
+        if not isinstance(value,(int,float)):
+            raise AttributeError("SIValue only takes int or float values as input.")
 
         # Parameters
         self._prefix, self._power = self._parse_prefix(prefix)
@@ -192,7 +209,7 @@ class SIValue(object):
         pico_re = "^p(ico)?$|^Pico$"
         nano_re = "^n(ano)?$|^Nano$"
         micro_re= "^μ$|^[Mm]icro$"
-        mili_re = "^m(ili)?$|^[M]ili$"
+        milli_re = "^m(illi)?$|^[M]illi$"
         centi_re = "^c(enti)?$|^Centi$"
         deci_re = "^d(eci)?$|^Deci$"
 
@@ -224,7 +241,7 @@ class SIValue(object):
             return "n", -9
         elif re.search(micro_re,name):
             return "μ", -6
-        elif re.search(mili_re,name):
+        elif re.search(milli_re,name):
             return "m", -3
         elif re.search(centi_re,name):
             return "c", -2
@@ -261,7 +278,6 @@ class SIValue(object):
 
     def central_value(self):
         return self._central_value
-
 
     def symbol(self):
         return self._symbol
@@ -319,10 +335,10 @@ class SIValue(object):
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self.__class__(self.value() * other, prefix=self._prefix)
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, SIValue, NonSIValue, or CustomValue.")
 
     def __rmul__(self,other):
         return self*other
@@ -330,19 +346,19 @@ class SIValue(object):
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self.__class__(self.value() / other, prefix=self._prefix)
         else:
-            raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue or CustomValue.")
+            raise AttributeError("Can only divide objects with type int, float, SIValue, NonSIValue or CustomValue.")
 
     def __rtruediv__(self,other):
         return (self / other)**-1
 
     def __pow__(self,modulo):
-        if isinstance(modulo,(int,float,complex)):
+        if isinstance(modulo,(int,float)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int or float.")
 
 
     # Bool
@@ -366,12 +382,18 @@ class SIValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() < other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a less than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() < other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() < other:
-                    return True
-            return False
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __ge__(self,other):
         return not self < other
@@ -381,12 +403,18 @@ class SIValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() > other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a greater than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() > other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() > other:
-                    return True
-            return False
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __le__(self,other):
         return not self > other
@@ -398,16 +426,19 @@ class NonSIValue(object):
     def is_value(cls,value_str:str)->bool:
         if cls._re_pattern is None:
             raise NotImplementedError("{} must overload cls._re_pattern. with a non-None value."\
-                                      .format(self.__class__.__name__))
+                                      .format(cls.__class__.__name__))
         if not isinstance(cls._re_pattern,str):
             raise AttributeError("{} has a non-string value for cls._re_pattern. cls._re_pattern must be a str."\
-                                 .format(self.__class__.__name__))
+                                 .format(cls.__class__.__name__))
         return bool(re.search(cls._re_pattern,value_str))
 
 
     def __init__(self,value,si_parent,sec=0,m=0,kg=0,K=0,A=0,mol=0,cd=0):
-        if not isinstance(value,(int,float,complex)):
-            raise AttributeError("NonSIValue only takes int, float, or complex values as input.")
+        if not isinstance(value,(int,float)):
+            raise AttributeError("NonSIValue only takes int or float as input for value.")
+
+        if not isinstance(si_parent,SIValue):
+            raise AttributeError("NonSIValue only takes SIValue as input for si_parent.")
 
         # Parameters
         self._value = value
@@ -475,10 +506,10 @@ class NonSIValue(object):
     def __mul__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() * other.central_value(), **(self.si_units()*other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self._si_parent.__class__(self.central_value() * other).convert_to_unit(self._symbol)
         else:
-            raise AttributeError("Can only multiply objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
+            raise AttributeError("Can only multiply objects with type int, float, SIValue, NonSIValue, or CustomValue.")
 
     def __rmul__(self,other):
         return self*other
@@ -486,19 +517,19 @@ class NonSIValue(object):
     def __truediv__(self,other):
         if isinstance(other,(CustomValue,SIValue,NonSIValue)):
             return CustomValue(self.central_value() / other.central_value(), **(self.si_units()/other.si_units()).as_dict())
-        elif isinstance(other,(float,int,complex)):
+        elif isinstance(other,(float,int)):
             return self._si_parent.__class__(self.central_value() / other).convert_to_unit(self._symbol)
         else:
-            raise AttributeError("Can only divide objects with type int, float, complex, SIValue, NonSIValue, or CustomValue.")
+            raise AttributeError("Can only divide objects with type int, float, SIValue, NonSIValue, or CustomValue.")
 
     def __rtruediv__(self,other):
         return (self / other)**-1
 
     def __pow__(self,modulo):
-        if isinstance(modulo,(int,float,complex)):
+        if isinstance(modulo,(int,float)):
             return CustomValue(self.central_value()**modulo, **(self.si_units()**modulo).as_dict())
         else:
-            raise AttributeError("Can only take a power with an object that has a type int, float, or complex.")
+            raise AttributeError("Can only take a power with an object that has a type int or float.")
 
 
     # Bool
@@ -522,12 +553,18 @@ class NonSIValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() < other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a less than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() < other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() < other:
-                    return True
-            return False
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a less than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __ge__(self,other):
         return not self < other
@@ -537,12 +574,18 @@ class NonSIValue(object):
             if self.si_units() == other.si_units():
                 if self.central_value() > other.central_value():
                     return True
+                return False
+            else:
+                raise ValueError("Cannot do a greater than compare against objects with different units.")
+        elif self.si_units() == Units():
+            if self.value() > other:
+                return True
             return False
         else:
             if self.si_units() == Units():
-                if self.value() > other:
-                    return True
-            return False
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, NonSIValue, int, or float.")
+            else:
+                raise TypeError("Can only do a greater than compare against objects with type CustomValue, SIValue, or NonSIValue.")
 
     def __le__(self,other):
         return not self > other
