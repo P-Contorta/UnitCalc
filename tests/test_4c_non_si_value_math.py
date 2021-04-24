@@ -5,9 +5,10 @@ from unitcalc.value_types.value import NonSIValue, SIValue, CustomValue
 class SIValueParentPos(SIValue):
     _re_pattern = "^[Ss][Ii]([Pp]arent[Pp]os)?$"
 
-    def __init__(self,value,prefix:str=""):
+    def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,prefix=prefix,
-                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1)
+                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "SIValuePos"
@@ -23,9 +24,10 @@ class SIValueParentPos(SIValue):
 class NonSIValueAllPositive(NonSIValue):
     _re_pattern = "^[Nn]onSIValuePos$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,SIValueParentPos(value * 10),
-                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1)
+                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "NonSIValuePos"
@@ -34,9 +36,10 @@ class NonSIValueAllPositive(NonSIValue):
 class SIValueParentNeg(SIValue):
     _re_pattern = "^[Ss][Ii]([Pp]arent[Nn]eg)?$"
 
-    def __init__(self,value,prefix:str=""):
+    def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,prefix=prefix,
-                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1)
+                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "SIValueNeg"
@@ -52,9 +55,10 @@ class SIValueParentNeg(SIValue):
 class NonSIValueAllNegative(NonSIValue):
     _re_pattern = "^[Nn]onSIValueNeg$"
 
-    def __init__(self,value):
+    def __init__(self,value,parser=None):
         super().__init__(value,SIValueParentNeg(value * 10),
-                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1)
+                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "NonSIValueNeg"

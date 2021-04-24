@@ -7,35 +7,39 @@ from unitcalc.value_types.value import SIValue
 ## Test classes ##
 class SIValueAllPositive(SIValue):
     _re_pattern = "^[Aa]ll[Pp]os(itive)?$"
-    def __init__(self,value,prefix:str=""):
+    def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,prefix=prefix,
-                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1)
+                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "AllPos"
 
 class SIValueAllPositiveKilo(SIValue):
     _re_pattern = "^[Aa]ll$|^[Aa]ll[Pp]os(itive)?[Kk]ilo$"
-    def __init__(self,value,prefix:str=""):
+    def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,prefix=prefix,center_prefix="kilo",
-                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1)
+                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "AllPosKilo"        
 
 class SIValueAllNegative(SIValue):
     _re_pattern = "^[Aa]ll[Nn]eg(ative)?$"
-    def __init__(self,value,prefix:str=""):
+    def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,prefix=prefix,
-                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1)
+                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "AllNeg"
 
 class SIValueDimless(SIValue):
     _re_pattern = "^[Dd]im(less)?$"
-    def __init__(self,value,prefix:str=""):
-        super().__init__(value,prefix=prefix)
+    def __init__(self,value,prefix:str="",parser=None):
+        super().__init__(value,prefix=prefix,
+                               parser=parser)
 
     def _base_symbol(self):
         return "Dimless"

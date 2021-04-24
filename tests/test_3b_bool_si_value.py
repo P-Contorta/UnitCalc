@@ -4,9 +4,10 @@ from unitcalc.value_types.value import SIValue
 ## Test Classes ##
 class SIValueAllPositive(SIValue):
     _re_pattern = "^[Aa]ll[Pp]os(itive)?$"
-    def __init__(self,value,prefix:str=""):
+    def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,prefix=prefix,
-                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1)
+                               kg=1,A=1,m=1,sec=1,cd=1,K=1,mol=1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "AllPos"
@@ -15,9 +16,10 @@ class SIValueAllPositive(SIValue):
 
 class SIValueAllNegative(SIValue):
     _re_pattern = "^[Aa]ll[Nn]eg(ative)?$"
-    def __init__(self,value,prefix:str=""):
+    def __init__(self,value,prefix:str="",parser=None):
         super().__init__(value,prefix=prefix,
-                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1)
+                               kg=-1,A=-1,m=-1,sec=-1,cd=-1,K=-1,mol=-1,
+                               parser=parser)
 
     def _base_symbol(self):
         return "AllNeg"
